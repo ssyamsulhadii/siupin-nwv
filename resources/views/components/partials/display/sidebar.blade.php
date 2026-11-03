@@ -5,8 +5,9 @@
                         <img src="{{ asset('assets/images/brand/logo-siupin.webp') }}" alt="Logo SIUPIN">
                     </div>
                     <span class="brand-copy">
-                        <span class="brand-title">SIUPIN</span>
-                        <span class="brand-subtitle">Admin Template</span>
+                        <span class="brand-title"
+                            style="background: linear-gradient(135deg, #22c55e 0%, #111827 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800;">SIUPIN</span>
+                        <span class="brand-subtitle">Admin <i class="bi bi-robot"></i></span>
                     </span>
                 </a>
             </div>
