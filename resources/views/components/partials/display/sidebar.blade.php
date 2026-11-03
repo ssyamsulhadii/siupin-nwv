@@ -16,37 +16,46 @@
                     <span class="nav-icon"><i class="bi bi-house"></i></span>
                     <span class="nav-text">Beranda</span>
                 </a>
+
+                @guest
+                    <a class="nav-link" href="{{ route('login') }}" aria-current="page">
+                        <span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span>
+                        <span class="nav-text">Masuk</span>
+                    </a>
+                    <a class="nav-link" href="{{ route('register') }}" aria-current="page">
+                        <span class="nav-icon"><i class="bi bi-person-plus"></i></span>
+                        <span class="nav-text">Daftar</span>
+                    </a>
+                @endguest
                 {{-- <a class="nav-link {{ request()->routeIs('instansi') ? 'active' : '' }}" href="{{ route('instansi') }}">
                     <span class="nav-icon"><i class="bi bi-bank" aria-hidden="true"></i></span>
                     <span class="nav-text">Instansi</span>
                 </a> --}}
-                <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                    @csrf
-                    <button type="submit" class="nav-link border-0 bg-transparent w-100 text-start text-danger"
-                        style="cursor: pointer;">
-                        <span class="nav-icon"><i class="bi bi-box-arrow-right text-danger"></i></span>
-                        <span class="nav-text">Keluar</span>
-                    </button>
-                </form>
+
+                @auth
+                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="nav-link border-0 bg-transparent w-100 text-start text-danger"
+                            style="cursor: pointer;">
+                            <span class="nav-icon"><i class="bi bi-box-arrow-right text-danger"></i></span>
+                            <span class="nav-text">Keluar</span>
+                        </button>
+                    </form>
+                @endauth
             </nav>
-            <div class="sidebar-user-profile">
 
-                <!-- Avatar -->
-                <div class="sidebar-profile-avatar">
-                    <img src="{{ asset('assets/images/avatar/account-profile.png') }}" alt="Avatar Pengguna">
-                    <span class="sidebar-profile-status"></span>
+            @auth
+                <div class="sidebar-user-profile">
+                    <!-- Avatar -->
+                    <div class="sidebar-profile-avatar">
+                        <img src="{{ asset('assets/images/avatar/account-profile.png') }}" alt="Avatar Pengguna">
+                        <span class="sidebar-profile-status"></span>
+                    </div>
+                    <!-- Informasi Pengguna -->
+                    <div class="sidebar-profile-info">
+                        <h6 class="text-wrap">{{ Auth::user()->nama }}</h6>
+                        <span>@ASN-PNS</span>
+                    </div>
                 </div>
-
-                <!-- Informasi Pengguna -->
-                <div class="sidebar-profile-info">
-                    <h6>I'm not robot</h6>
-                    <span>@ASN-PNS</span>
-                </div>
-
-                <!-- Status -->
-                <div class="sidebar-profile-menu">
-                    <i class="bi bi-three-dots-vertical"></i>
-                </div>
-
-            </div>
+            @endauth
         </aside>

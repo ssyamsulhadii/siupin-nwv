@@ -13,30 +13,32 @@
                 <i class="bi bi-moon-stars" data-theme-icon aria-hidden="true"></i>
             </button>
 
-            <div class="dropdown">
-                <button class="profile-button dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    <img class="avatar-img avatar-sm" src="{{ asset('assets/images/avatar/account-profile.png') }}">
-                    <span class="d-none d-sm-inline">
-                        I'm not robot
-                    </span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li>
-                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="dropdown-item text-danger d-flex align-items-center gap-2"
-                                style="cursor: pointer;">
-                                <i class="bi bi-box-arrow-right"></i> Keluar
-                            </button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
+            @auth
+                <div class="dropdown">
+                    <button class="profile-button dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <img class="avatar-img avatar-sm" src="{{ asset('assets/images/avatar/account-profile.png') }}">
+                        <span class="d-none d-sm-inline">
+                            {{ Auth::user()->nama }}
+                        </span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="dropdown-item text-danger d-flex align-items-center gap-2"
+                                    style="cursor: pointer;">
+                                    <i class="bi bi-box-arrow-right"></i> Keluar
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            @endauth
         </div>
     </div>
 </nav>

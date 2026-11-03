@@ -29,7 +29,7 @@ new #[Layout('layouts.guest')] class extends Component {
     <main class="auth-page d-flex align-items-center justify-content-center min-vh-100 bg-light py-5">
         <section class="auth-card card shadow-lg border-0 rounded-4 p-4 p-md-5 text-center bg-white"
             style="max-width: 480px; width: 100%;">
-
+            <x-partials.feedback.alert />
             <!-- Logo & Brand Header -->
             <div class="mb-4">
                 <img src="{{ asset('assets/images/brand/logo-siupin.webp') }}" alt="Logo Siupin" class="img-fluid"

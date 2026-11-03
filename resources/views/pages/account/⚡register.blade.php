@@ -3,19 +3,29 @@
 use App\Models\User;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-
+use App\Models\DataPns;
+use Illuminate\Validation\Rule;
 new #[Layout('layouts.guest')] class extends Component {
     public $username = '';
     public $password = '';
+    public $password_confirmation = '';
     public $nik = '';
 
     public function register()
     {
-        $this->validate([
-            'username' => ['required'],
-            'password' => ['required'],
-            'nik' => ['required'],
-        ]);
+        $validated = $this->validate(
+            [
+                'username' => ['required', 'digits:18', Rule::in(DataPns::nipList()), 'unique:users,username'],
+                'nik' => 'required|digits:16|unique:users,nik',
+                'password' => 'required|min:6|confirmed',
+                'password_confirmation' => 'required|min:6',
+            ],
+            ['username.in' => 'NIP tidak terdaftar dalam sistem'],
+        );
+        $validated['password'] = bcrypt($validated['password']);
+        $validated['nama'] = DataPns::findByNip($validated['username'])->nama;
+        User::create($validated);
+        return redirect()->route('login')->with('success', 'Akun berhasil dibuat. Silakan masuk dengan akun Anda.');
     }
 };
 ?>
@@ -114,6 +124,9 @@ new #[Layout('layouts.guest')] class extends Component {
                             <i class="bi bi-eye fs-5" id="toggleIconConfirm"></i>
                         </button>
                     </div>
+                    @error('password_confirmation')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <!-- Tombol Submit -->
