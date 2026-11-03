@@ -61,10 +61,10 @@ new #[Layout('layouts.guest')] class extends Component {
 
                 <!-- Input Username (NIP) -->
                 <div class="mb-3">
-                    <label for="username" class="form-label fw-semibold small">USERNAME (Nomor Induk Pegawai)</label>
+                    <label for="username" class="form-label fw-semibold small">Username (Nomor Induk Pegawai)</label>
                     <div class="input-group">
                         <span class="input-group-text bg-light text-muted"><i class="bi bi-person-badge"></i></span>
-                        <input type="number" class="form-control" id="username" wire:model="username"
+                        <input type="text" class="form-control" id="username" wire:model="username"
                             placeholder="Masukkan NIP" required>
                     </div>
                     @error('username')
@@ -79,7 +79,7 @@ new #[Layout('layouts.guest')] class extends Component {
                         <div class="input-group">
                             <span class="input-group-text bg-light text-muted"><i class="bi bi-lock"></i></span>
                             <input type="password" class="form-control" id="passwordInput" wire:model="password"
-                                placeholder="Minimal 6 karakter" required>
+                                placeholder="*******" required>
                         </div>
                         <button type="button"
                             class="btn position-absolute top-50 end-0 translate-middle-y border-0 bg-transparent text-muted px-3"

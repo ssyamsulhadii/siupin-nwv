@@ -55,7 +55,7 @@ new #[Layout('layouts.guest')] class extends Component {
 
                 <!-- Input Username (NIP) -->
                 <div class="mb-3">
-                    <label for="username" class="form-label fw-semibold small">USERNAME (Nomor Induk Pegawai)</label>
+                    <label for="username" class="form-label fw-semibold small">Username (Nomor Induk Pegawai)</label>
                     <div class="input-group">
                         <span class="input-group-text bg-light text-muted"><i class="bi bi-person-badge"></i></span>
                         <input type="number" class="form-control" id="username" wire:model="username"
