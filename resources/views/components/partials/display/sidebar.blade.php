@@ -2,7 +2,7 @@
             <div class="sidebar-header">
                 <a class="brand-mark" href="{{ route('beranda') }}" aria-label="adminHMD dashboard">
                     <div class="brand-logo-wrapper">
-                        <img src="{{ asset('assets/images/brand/logo-siupin.png') }}" alt="Logo SIUPIN">
+                        <img src="{{ asset('assets/images/brand/logo-siupin.webp') }}" alt="Logo SIUPIN">
                     </div>
                     <span class="brand-copy">
                         <span class="brand-title">SIUPIN</span>
@@ -29,22 +29,24 @@
                     </button>
                 </form>
             </nav>
-            <div class="sidebar-user d-flex align-items-center gap-3 px-3 py-3 border-bottom border-light-subtle">
-                <!-- Avatar Pengguna dengan efek border/shadow tipis -->
-                <div class="flex-shrink-0">
-                    <img class="avatar-img avatar-md sidebar-user-avatar rounded-circle shadow-sm object-fit-cover"
-                        src="{{ asset('assets/images/avatar/account-profile.png') }}" alt="Avatar"
-                        style="width: 45px; height: 45px;">
+            <div class="sidebar-user-profile">
+
+                <!-- Avatar -->
+                <div class="sidebar-profile-avatar">
+                    <img src="{{ asset('assets/images/avatar/account-profile.png') }}" alt="Avatar Pengguna">
+                    <span class="sidebar-profile-status"></span>
                 </div>
 
-                <!-- Informasi Nama dan Username -->
-                <div class="flex-grow-1 overflow-hidden">
-                    <h6 class="mb-0 text-truncate fw-semibold text-dark" style="font-size: 0.95rem;">
-                        I'm not robot
-                    </h6>
-                    <div class="text-muted text-truncate d-block" style="font-size: 0.8rem;">
-                        @ASN-PNS
-                    </div>
+                <!-- Informasi Pengguna -->
+                <div class="sidebar-profile-info">
+                    <h6>I'm not robot</h6>
+                    <span>@ASN-PNS</span>
                 </div>
+
+                <!-- Status -->
+                <div class="sidebar-profile-menu">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </div>
+
             </div>
         </aside>

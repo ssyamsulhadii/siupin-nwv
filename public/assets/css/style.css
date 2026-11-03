@@ -1628,27 +1628,105 @@ html[data-theme="dark"] {
 }
 
 .brand-logo-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 45px;
-  height: 45px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 244, 248, 0.8));
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(226, 232, 240, 0.8);
   transition: all 0.3s ease;
 }
 
 .brand-mark:hover .brand-logo-wrapper {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(13, 110, 253, 0.15);
-  border-color: rgba(13, 110, 253, 0.3);
 }
 
 .brand-logo-wrapper img {
-  height: 32px;
-  /* Sesuaikan ukuran ikon di dalam box */
+  height: 50px;
   width: auto;
   object-fit: contain;
+}
+
+/* =================================
+   SIDEBAR USER PROFILE
+================================= */
+
+.sidebar-user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px;
+  padding: 12px;
+  background: #f8faff;
+  border: 1px solid #e9eef7;
+  border-radius: 14px;
+  min-width: 0;
+  transition: all .25s ease;
+}
+
+/* Avatar */
+.sidebar-profile-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.sidebar-profile-avatar img {
+  display: block;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .10);
+}
+
+.sidebar-profile-status {
+  position: absolute;
+  right: 0;
+  bottom: 1px;
+  width: 11px;
+  height: 11px;
+  background: #22c55e;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+
+/* Informasi */
+.sidebar-profile-info {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.sidebar-profile-info h6 {
+  margin: 0 0 3px;
+  color: #26334d;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-profile-info span {
+  display: block;
+  color: #8491a5;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Menu */
+.sidebar-profile-menu {
+  color: #8491a5;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+
+/* Mencegah layout melebar dari layar */
+.admin-shell {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.admin-main {
+  min-width: 0;
+  max-width: 100%;
 }

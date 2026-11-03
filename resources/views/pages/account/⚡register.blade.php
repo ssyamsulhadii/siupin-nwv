@@ -27,11 +27,8 @@ new #[Layout('layouts.guest')] class extends Component {
 
             <!-- Logo & Brand Header -->
             <div class="mb-4">
-                <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle p-3 mb-3 shadow-sm border"
-                    style="width: 100px; height: 100px;">
-                    <img src="{{ asset('assets/images/brand/logo-siupin.png') }}" alt="Logo Siupin" class="img-fluid"
-                        style="max-height: 70px;">
-                </div>
+                <img src="{{ asset('assets/images/brand/logo-siupin.webp') }}" alt="Logo Siupin" class="img-fluid"
+                    style="height: 170px;">
                 <h4 class="fw-bold text-dark mb-1">SIUPIN</h4>
                 <p class="eyebrow text-muted small fw-semibold tracking-wider mb-2">PENDAFTARAN AKUN BARU</p>
                 <hr class="w-25 mx-auto text-primary opacity-75">
