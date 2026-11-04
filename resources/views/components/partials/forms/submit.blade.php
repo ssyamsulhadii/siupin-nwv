@@ -9,7 +9,7 @@
     <!-- Teks & Ikon saat kondisi normal / tidak loading -->
     <span wire:loading.remove wire:target="{{ $target }}">
         <i class="bi bi-send" aria-hidden="true"></i>
-        {{ $isUpdate ? 'Update' : 'Save' }}
+        {{ $isUpdate ? 'Ubah' : 'Simpan' }}
     </span>
 
     <!-- Teks & Spinner saat proses loading/simpan/update berjalan -->

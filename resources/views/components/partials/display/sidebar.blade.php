@@ -28,10 +28,34 @@
                         <span class="nav-text">Daftar</span>
                     </a>
                 @endguest
-                {{-- <a class="nav-link {{ request()->routeIs('instansi') ? 'active' : '' }}" href="{{ route('instansi') }}">
-                    <span class="nav-icon"><i class="bi bi-bank" aria-hidden="true"></i></span>
-                    <span class="nav-text">Instansi</span>
-                </a> --}}
+
+                @auth
+
+                    <!-- Menu Jenis Pensiun -->
+                    <a class="nav-link {{ request()->routeIs('jenis-pensiun') ? 'active' : '' }}"
+                        href="{{ route('jenis-pensiun') }}">
+                        <span class="nav-icon"><i class="bi bi-list-check" aria-hidden="true"></i></span>
+                        <span class="nav-text">Jenis Pensiun</span>
+                    </a>
+
+                    <!-- Menu Jabatan Nominatif -->
+                    <a class="nav-link" href="#">
+                        <span class="nav-icon"><i class="bi bi-file-text" aria-hidden="true"></i></span>
+                        <span class="nav-text">Jabatan Nominatif</span>
+                    </a>
+
+                    <!-- Menu Data Pemohon -->
+                    <a class="nav-link" href="#">
+                        <span class="nav-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
+                        <span class="nav-text">Data Pemohon</span>
+                    </a>
+
+                    <!-- Menu Manajemen User -->
+                    <a class="nav-link" href="#">
+                        <span class="nav-icon"><i class="bi bi-person-gear" aria-hidden="true"></i></span>
+                        <span class="nav-text">Manajemen User</span>
+                    </a>
+                @endauth
 
                 @auth
                     <form action="{{ route('logout') }}" method="POST" class="d-inline">
