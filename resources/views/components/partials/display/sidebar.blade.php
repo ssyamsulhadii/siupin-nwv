@@ -39,7 +39,8 @@
                     </a>
 
                     <!-- Menu Jabatan Nominatif -->
-                    <a class="nav-link" href="#">
+                    <a class="nav-link {{ request()->routeIs('jabatan-nominatif') ? 'active' : '' }}"
+                        href="{{ route('jabatan-nominatif') }}">
                         <span class="nav-icon"><i class="bi bi-file-text" aria-hidden="true"></i></span>
                         <span class="nav-text">Jabatan Nominatif</span>
                     </a>

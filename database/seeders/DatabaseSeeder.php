@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\JabatanNominatif;
 use App\Models\JenisPensiun;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -54,6 +55,45 @@ class DatabaseSeeder extends Seeder
         ];
         foreach ($jenisPensiun as $item) {
             JenisPensiun::create($item);
+        }
+
+        $jabatanNominatif = [
+                [
+                    'nama' => 'Struktural Jabatan Pimpinan Tinggi',
+                    'bup' => 60,
+                ],
+                [
+                    'nama' => 'Struktural Jabatan Administrasi',
+                    'bup' => 58,
+                ],
+                [
+                    'nama' => 'Jabatan Pelaksana',
+                    'bup' => 58,
+                ],
+                [
+                    'nama' => 'Jabatan Fungsional Madya',
+                    'bup' => 60,
+                ],
+                [
+                    'nama' => 'Jabatan Fungsional Muda',
+                    'bup' => 58,
+                ],
+                [
+                    'nama' => 'Jabatan Fungsional Pertama',
+                    'bup' => 58,
+                ],
+                [
+                    'nama' => 'Jabatan Fungsional Terampil',
+                    'bup' => 58,
+                ],
+                [
+                    'nama' => 'Jabatan Fungsional Guru',
+                    'bup' => 60,
+                ],
+        ];
+        
+        foreach ($jabatanNominatif as $item) {
+            JabatanNominatif::create($item);
         }
     }
 }

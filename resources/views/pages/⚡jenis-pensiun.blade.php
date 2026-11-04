@@ -10,7 +10,6 @@ new class extends Component {
         'keterangan' => null,
         'with_tanggal' => null,
     ];
-
     // Properti untuk menyimpan ID data yang sedang diedit
     public ?int $jenis_pensiun_id = null;
 
@@ -19,20 +18,66 @@ new class extends Component {
         $this->list_jenis_pensiun = JenisPensiun::get();
     }
 
+    public function save()
+    {
+        $validated = $this->validate([
+            'form.nama' => 'required|string|max:255',
+            'form.keterangan' => 'required|string',
+            'form.with_tanggal' => 'required|boolean',
+        ]);
+        if ($this->jenis_pensiun_id) {
+            JenisPensiun::find($this->jenis_pensiun_id)->update($validated['form']);
+            session()->flash('message', 'Data jenis pensiun berhasil diperbarui!');
+        } else {
+            JenisPensiun::create($validated['form']);
+            session()->flash('message', 'Data jenis pensiun berhasil disimpan!');
+        }
+        $this->list_jenis_pensiun = JenisPensiun::get();
+        $this->resetForm();
+    }
+
+    public function edit(JenisPensiun $jenis_pensiun)
+    {
+        $this->resetForm();
+        $this->jenis_pensiun_id = $jenis_pensiun->id;
+        $this->form = [
+            'nama' => $jenis_pensiun->nama,
+            'keterangan' => $jenis_pensiun->keterangan,
+            'with_tanggal' => $jenis_pensiun->with_tanggal,
+        ];
+    }
+
     public function delete(JenisPensiun $jenis_pensiun)
     {
         $jenis_pensiun->delete();
         $this->list_jenis_pensiun = JenisPensiun::get();
+        $this->resetForm();
         session()->flash('message', 'Data jenis pensiun berhasil dihapus!');
+    }
+
+    public function resetForm()
+    {
+        $this->reset(['form', 'jenis_pensiun_id']);
+        $this->resetValidation();
+    }
+
+    public function validationAttributes()
+    {
+        return [
+            'form.nama' => 'Nama Jenis Pensiun',
+            'form.keterangan' => 'Keterangan',
+            'form.with_tanggal' => 'With Tanggal',
+        ];
     }
 };
 ?>
 
 <div>
     <div class="container-fluid px-3 px-lg-4 py-4">
-        <x-partials.display.page-title title="Data Jenis Pensiun"></x-partials.display.page-title>
+        <x-partials.display.page-title title="Jenis Pensiun"></x-partials.display.page-title>
         <section class="row g-3">
-            <div class="col-12 col-xl-8">
+            {{-- Tabel Data --}}
+            <div class="col-12 col-xl-7">
                 <section class="panel">
                     <div class="panel-header">
                         <h2 class="h5 mb-1 section-title"><i class="bi bi-table" aria-hidden="true"></i>
@@ -48,7 +93,7 @@ new class extends Component {
                                     <th>Nama</th>
                                     <th>Keterangan</th>
                                     <th>With Tanggal</th>
-                                    <th class="text-center">Action</th>
+                                    <th class="text-center">Menu</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -76,7 +121,9 @@ new class extends Component {
                     </div>
                 </section>
             </div>
-            <div class="col-12 col-xl-4">
+
+            {{-- Form Input --}}
+            <div class="col-12 col-xl-5">
                 <form class="panel needs-validation" wire:submit="save" method="POST">
                     <div class="panel-header">
                         <div>
@@ -87,12 +134,14 @@ new class extends Component {
 
                     </div>
                     <div class="row g-3">
-                        <x-partials.forms.input name="form.nama" label="Nama Jenis Pensiun"
-                            wire:model="form.nama"></x-partials.forms.input>
+                        <x-partials.forms.input name="form.nama" label="Nama Jenis Pensiun" wire:model="form.nama"
+                            phr="Masukkan Nama Jenis Pensiun"></x-partials.forms.input>
                         <x-partials.forms.text-area setcol="12" name="form.keterangan" label="Keterangan"
-                            wire:model="form.keterangan" rows="3"></x-partials.forms.text-area>
-                        {{-- <x-partials.forms.checkbox name="form.with_tanggal" wire:model="form.with_tanggal"
-                            label="With Tanggal"></x-partials.forms.checkbox> --}}
+                            wire:model="form.keterangan" rows="3"
+                            phr="Masukkan Keterangan"></x-partials.forms.text-area>
+                        <x-partials.forms.radio-button label="With Tanggal:" model="form.with_tanggal"
+                            name="with_tanggal" option1Text="Ya" option1Value="1" option2Text="Tidak"
+                            option2Value="0" />
                     </div>
                     <div class="d-flex justify-content-end mt-4">
                         @if ($jenis_pensiun_id)

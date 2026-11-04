@@ -7,6 +7,7 @@ Route::livewire('/masuk', 'pages::account.login')->name('login')->middleware('gu
 Route::livewire('/daftar', 'pages::account.register')->name('register')->middleware('guest');
 Route::livewire('/', 'pages::beranda')->name('beranda');
 Route::livewire('/jenis-pensiun', 'pages::jenis-pensiun')->name('jenis-pensiun')->middleware('auth');
+Route::livewire('/jabatan-nominatif', 'pages::jabatan-nominatif')->name('jabatan-nominatif')->middleware('auth');
 
 
 
