@@ -31,6 +31,20 @@
 
                 @auth
 
+                    <!-- Menu Data Statistik -->
+                    <a class="nav-link {{ request()->routeIs('data-statistik') ? 'active' : '' }}"
+                        href="{{ route('data-statistik') }}">
+                        <span class="nav-icon"><i class="bi bi-clipboard-data" aria-hidden="true"></i></span>
+                        <span class="nav-text">Data Statistik</span>
+                    </a>
+
+                    <!-- Menu Data Pemohon -->
+                    <a class="nav-link {{ request()->routeIs('data-pemohon') ? 'active' : '' }}"
+                        href="{{ route('data-pemohon') }}">
+                        <span class="nav-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
+                        <span class="nav-text">Data Pemohon</span>
+                    </a>
+
                     <!-- Menu Jenis Pensiun -->
                     <a class="nav-link {{ request()->routeIs('jenis-pensiun') ? 'active' : '' }}"
                         href="{{ route('jenis-pensiun') }}">
@@ -45,17 +59,18 @@
                         <span class="nav-text">Jabatan Nominatif</span>
                     </a>
 
-                    <!-- Menu Data Pemohon -->
-                    <a class="nav-link" href="#">
-                        <span class="nav-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
-                        <span class="nav-text">Data Pemohon</span>
-                    </a>
-
                     <!-- Menu Manajemen User -->
                     <a class="nav-link {{ request()->routeIs('manajemen-user') ? 'active' : '' }}"
                         href="{{ route('manajemen-user') }}">
                         <span class="nav-icon"><i class="bi bi-person-gear" aria-hidden="true"></i></span>
                         <span class="nav-text">Manajemen User</span>
+                    </a>
+
+                    <!-- Menu Manajemen User -->
+                    <a class="nav-link {{ request()->routeIs('dokumen-informasi') ? 'active' : '' }}"
+                        href="{{ route('dokumen-informasi') }}">
+                        <span class="nav-icon"><i class="bi bi-folder2-open" aria-hidden="true"></i></span>
+                        <span class="nav-text">Dokumen Informasi</span>
                     </a>
                 @endauth
 
