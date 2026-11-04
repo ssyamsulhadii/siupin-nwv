@@ -98,7 +98,7 @@ new class extends Component {
                                                 role="group" aria-label="Aksi Jenis Pensiun">
                                                 <!-- Tombol Ubah / Edit -->
                                                 <x-partials.forms.action-button icon="bi-arrow-repeat"
-                                                    label="Reset Password" color="warning"
+                                                    label="Reset Password" color="info"
                                                     wireClick="edit({{ $user->id }})" />
                                             </div>
                                         </td>
@@ -128,7 +128,7 @@ new class extends Component {
                     <div class="panel-header">
                         <div>
                             <h2 class="h5 mb-1 section-title"><i class="bi bi-ui-checks-grid"
-                                    aria-hidden="true"></i><span>Form Information</span></h2>
+                                    aria-hidden="true"></i><span>Form Reset Password</span></h2>
                         </div>
 
                     </div>
