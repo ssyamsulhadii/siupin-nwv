@@ -86,10 +86,10 @@ new class extends Component {
                         <x-partials.feedback.alert />
                     </div>
                     <div class="table-responsive">
-                        <table class="table align-middle mb-0" id="ordersTable" data-searchable-table="">
+                        <table class="table table-bordered align-middle mb-0" id="ordersTable" data-searchable-table="">
                             <thead>
                                 <tr>
-                                    <th>No</th>
+                                    <th class="text-center">No</th>
                                     <th>Nama</th>
                                     <th>Keterangan</th>
                                     <th>With Tanggal</th>
@@ -99,13 +99,14 @@ new class extends Component {
                             <tbody>
                                 @foreach ($list_jenis_pensiun as $jenis_pensiun)
                                     <tr>
-                                        <td class="fw-semibold">{{ $loop->iteration }}</td>
+                                        <td class="text-center fw-semibold" style="min-width: 40px;">
+                                            {{ $loop->iteration }}</td>
                                         <td>{{ $jenis_pensiun->nama }}</td>
                                         <td>{{ $jenis_pensiun->keterangan }}</td>
                                         <td class="text-center">{{ $jenis_pensiun->with_tanggal ? 'Ya' : 'Tidak' }}</td>
                                         <td class="text-center">
-                                            <div class="d-flex align-items-center gap-1" role="group"
-                                                aria-label="Aksi Jenis Pensiun">
+                                            <div class="d-flex align-items-center justify-content-center gap-1"
+                                                role="group" aria-label="Aksi Jenis Pensiun">
                                                 <!-- Tombol Ubah / Edit -->
                                                 <x-partials.forms.action-button icon="bi-pencil" label="Ubah"
                                                     color="warning" wireClick="edit({{ $jenis_pensiun->id }})" />

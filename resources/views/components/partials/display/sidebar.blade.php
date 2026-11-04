@@ -52,7 +52,8 @@
                     </a>
 
                     <!-- Menu Manajemen User -->
-                    <a class="nav-link" href="#">
+                    <a class="nav-link {{ request()->routeIs('manajemen-user') ? 'active' : '' }}"
+                        href="{{ route('manajemen-user') }}">
                         <span class="nav-icon"><i class="bi bi-person-gear" aria-hidden="true"></i></span>
                         <span class="nav-text">Manajemen User</span>
                     </a>
