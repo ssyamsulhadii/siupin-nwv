@@ -60,40 +60,15 @@ new #[Layout('layouts.guest')] class extends Component {
             <form wire:submit="authenticate" class="needs-validation text-start" novalidate>
 
                 <!-- Input Username (NIP) -->
-                <div class="mb-3">
-                    <label for="username" class="form-label fw-semibold small">Username (Nomor Induk Pegawai)</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-light text-muted"><i class="bi bi-person-badge"></i></span>
-                        <input type="text" class="form-control" id="username" wire:model="username"
-                            placeholder="Masukkan NIP" required>
-                    </div>
-                    @error('username')
-                        <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
+                <x-partials.forms.input-icon name="username" label="Username (Nomor Induk Pegawai)"
+                    placeholder="Masukkan NIP" icon="bi-person-badge" wireModel="username" />
 
                 <!-- Input Password -->
-                <div class="mb-3">
-                    <label for="password" class="form-label fw-semibold small">Password</label>
-                    <div class="position-relative">
-                        <div class="input-group">
-                            <span class="input-group-text bg-light text-muted"><i class="bi bi-lock"></i></span>
-                            <input type="password" class="form-control" id="passwordInput" wire:model="password"
-                                placeholder="*******" required>
-                        </div>
-                        <button type="button"
-                            class="btn position-absolute top-50 end-0 translate-middle-y border-0 bg-transparent text-muted px-3"
-                            id="togglePassword" style="z-index: 10;">
-                            <i class="bi bi-eye fs-5" id="toggleIcon"></i>
-                        </button>
-                    </div>
-                    @error('password')
-                        <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
+                <x-partials.forms.input-password name="password" label="Password" placeholder="******"
+                    wireModel="password" id="passwordInput" />
 
                 <button
-                    class="btn btn-primary w-100 py-2 fw-semibold shadow-sm d-flex align-items-center justify-content-center gap-2"
+                    class="btn btn-primary w-100 py-2 fw-semibold shadow-sm d-flex align-items-center justify-content-center gap-2 mt-4"
                     type="submit">
                     <i class="bi bi-box-arrow-in-right fs-5" aria-hidden="true"></i> Masuk ke Sistem
                 </button>

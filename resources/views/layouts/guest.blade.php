@@ -13,6 +13,15 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     @livewireStyles
     @stack('styles')
+    <style>
+        /* Mengunci tombol agar tetap diam dan tidak berubah warna background saat di-hover */
+        .no-hover-effect:hover {
+            background-color: transparent !important;
+            transform: none !important;
+            box-shadow: none !important;
+            /* Warna teks dan border akan tetap mempertahankan kondisi aslinya (normal / error) */
+        }
+    </style>
 </head>
 
 <body>
@@ -24,31 +33,25 @@
     @livewireScripts
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
-
-
-    {{-- <script>
+    @stack('scripts')
+    <script>
         document.addEventListener('click', function(event) {
-            if (event.target.closest('#togglePassword')) {
-                const passwordInput = document.getElementById('password');
-                const toggleIcon = document.getElementById('toggleIcon');
+            const toggleBtn = event.target.closest('.toggle-password-btn');
+            if (!toggleBtn) return;
 
-                if (passwordInput) {
-                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                    passwordInput.setAttribute('type', type);
+            const targetId = toggleBtn.getAttribute('data-target');
+            const passwordInput = document.getElementById(targetId);
+            const toggleIcon = toggleBtn.querySelector('.toggle-icon');
 
-                    if (type === 'text') {
-                        toggleIcon.classList.remove('bi-eye');
-                        toggleIcon.classList.add('bi-eye-slash');
-                    } else {
-                        toggleIcon.classList.remove('bi-eye-slash');
-                        toggleIcon.classList.add('bi-eye');
-                    }
-                }
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.replace('bi-eye', 'bi-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.replace('bi-eye-slash', 'bi-eye');
             }
         });
-    </script> --}}
-
-    @stack('scripts')
+    </script>
 </body>
 
 </html>

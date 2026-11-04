@@ -9,11 +9,9 @@ new class extends Component {
     public $search = '';
     public ?int $user_id = null;
     public $password = '';
-    public array $form = [
-        'username' => null,
-        'nik' => null,
-        'nama' => null,
-    ];
+    public $password_confirmation = '';
+    public array $form = ['username' => '', 'nik' => '', 'nama' => ''];
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -42,9 +40,20 @@ new class extends Component {
         ];
     }
 
+    public function save()
+    {
+        $this->validate([
+            'password' => 'required|min:6|confirmed',
+            'password_confirmation' => 'required|min:6',
+        ]);
+        User::find($this->user_id)->update(['password' => \Illuminate\Support\Facades\Hash::make($this->password)]);
+        session()->flash('message', 'Data password user berhasil diperbarui!');
+        $this->resetForm();
+    }
+
     public function resetForm()
     {
-        $this->reset(['form', 'password', 'user_id']);
+        $this->reset(['form', 'password', 'password_confirmation', 'user_id']);
         $this->resetValidation();
     }
 };
@@ -88,8 +97,9 @@ new class extends Component {
                                             <div class="d-flex align-items-center justify-content-center gap-1"
                                                 role="group" aria-label="Aksi Jenis Pensiun">
                                                 <!-- Tombol Ubah / Edit -->
-                                                <x-partials.forms.action-button icon="bi-pencil" label="Ubah"
-                                                    color="warning" wireClick="edit({{ $user->id }})" />
+                                                <x-partials.forms.action-button icon="bi-arrow-repeat"
+                                                    label="Reset Password" color="warning"
+                                                    wireClick="edit({{ $user->id }})" />
                                             </div>
                                         </td>
                                     </tr>
@@ -119,7 +129,6 @@ new class extends Component {
                         <div>
                             <h2 class="h5 mb-1 section-title"><i class="bi bi-ui-checks-grid"
                                     aria-hidden="true"></i><span>Form Information</span></h2>
-                            <p class="text-muted mb-0">Isi Form Berikut.</p>
                         </div>
 
                     </div>
@@ -130,6 +139,16 @@ new class extends Component {
                             disabled></x-partials.forms.input>
                         <x-partials.forms.input name="form.nik" label="NIK" wire:model="form.nik"
                             disabled></x-partials.forms.input>
+                        @if ($user_id)
+                            <!-- Password Utama menggunakan Komponen Baru -->
+                            <x-partials.forms.input-password name="password" label="Password"
+                                placeholder="Minimal 6 karakter" wireModel="password" id="passwordInput" />
+
+                            <!-- Konfirmasi Password menggunakan Komponen yang Sama dengan ID Berbeda -->
+                            <x-partials.forms.input-password name="password_confirmation" label="Konfirmasi Password"
+                                placeholder="Ulangi password" wireModel="password_confirmation"
+                                id="passwordConfirmInput" />
+                        @endif
                     </div>
                     <div class="d-flex justify-content-end mt-4">
                         @if ($user_id)
@@ -141,4 +160,36 @@ new class extends Component {
             </div>
         </section>
     </div>
+
+    @push('styles')
+        <style>
+            /* Mengunci tombol agar tetap diam dan tidak berubah warna background saat di-hover */
+            .no-hover-effect:hover {
+                background-color: transparent !important;
+                transform: none !important;
+                box-shadow: none !important;
+                /* Warna teks dan border akan tetap mempertahankan kondisi aslinya (normal / error) */
+            }
+        </style>
+    @endpush
+    @push('scripts')
+        <script>
+            document.addEventListener('click', function(event) {
+                const toggleBtn = event.target.closest('.toggle-password-btn');
+                if (!toggleBtn) return;
+
+                const targetId = toggleBtn.getAttribute('data-target');
+                const passwordInput = document.getElementById(targetId);
+                const toggleIcon = toggleBtn.querySelector('.toggle-icon');
+
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleIcon.classList.replace('bi-eye', 'bi-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    toggleIcon.classList.replace('bi-eye-slash', 'bi-eye');
+                }
+            });
+        </script>
+    @endpush
 </div>
