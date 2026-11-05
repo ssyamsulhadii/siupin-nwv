@@ -1,9 +1,15 @@
 <?php
 
+use App\Models\DokumenInformasi;
 use Livewire\Component;
 
 new class extends Component {
-    //
+    public $list_dokumen_informasi = null;
+
+    public function mount()
+    {
+        $this->list_dokumen_informasi = DokumenInformasi::where('format_file', 'docx')->get();
+    }
 };
 ?>
 
@@ -162,28 +168,18 @@ new class extends Component {
                                 Format
                                 Dokumen Pendukung:</span>
                             <div class="list-group list-group-flush small">
-                                <a target="_blank"
-                                    href="{{ asset('assets/dokumen-informasi/surat-permohonan-usul-pensiun.docx') }}"
-                                    class="list-group-item list-group-item-action py-1 px-2 text-primary">
-                                    <i class="bi bi-file-earmark-word me-1"></i> Surat Permohonan Usul Pensiun.docx
-                                </a>
-                                <a target="_blank"
-                                    href="{{ asset('assets/dokumen-informasi/surat-pernyataan-tidak-sedang-menjalani-proses-pidana.docx') }}"
-                                    class="list-group-item list-group-item-action py-1 px-2 text-primary">
-                                    <i class="bi bi-file-earmark-word me-1"></i> Surat Pernyataan Tidak Sedang Menjalani
-                                    Proses Pidana.docx
-                                </a>
-                                <a target="_blank"
-                                    href="{{ asset('assets/dokumen-informasi/surat-pernyataan-tidak-pernah-dijatuhi-hukuman-disiplin.docx') }}"
-                                    class="list-group-item list-group-item-action py-1 px-2 text-primary">
-                                    <i class="bi bi-file-earmark-word me-1"></i> Surat Pernyataan Tidak Pernah Dijatuhi
-                                    Hukuman Disiplin.docx
-                                </a>
-                                <a target="_blank"
-                                    href="{{ asset('assets/dokumen-informasi/surat-pernyataan-pensiun-dini.docx') }}"
-                                    class="list-group-item list-group-item-action py-1 px-2 text-primary">
-                                    <i class="bi bi-file-earmark-word me-1"></i> Surat Pernyataan Pensiun Dini.docx
-                                </a>
+                                @forelse ($list_dokumen_informasi as $dokumen_informasi)
+                                    <a href="{{ asset('storage/dokumen-informasi/' . $dokumen_informasi->nama_file) }}"
+                                        target="_blank"
+                                        class="list-group-item list-group-item-action py-1 px-2 text-primary">
+                                        <i class="bi bi-file-earmark-word me-1"></i> {{ $dokumen_informasi->label }}
+                                    </a>
+                                @empty
+                                    <div class="text-center py-3 text-muted small">
+                                        <i class="bi bi-folder-x fs-4 d-block mb-1"></i>
+                                        Belum ada dokumen informasi.
+                                    </div>
+                                @endforelse
                             </div>
                         </div>
 

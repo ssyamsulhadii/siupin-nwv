@@ -11,9 +11,8 @@ class DataPns extends Model
 {
     public static function list(): array
     {
-        // $nama_file = \App\Models\UploadDokumen::first()->data_pns;
-        $nama_file = 'data-pns.csv';
-        $path = public_path('assets/dokumen-informasi/' . $nama_file);
+        $nama_file = \App\Models\DokumenInformasi::firstWhere('format_file', 'csv')->nama_file;
+        $path = public_path('storage/dokumen-informasi/' . $nama_file);
 
         if (!File::exists($path)) {
             return [];

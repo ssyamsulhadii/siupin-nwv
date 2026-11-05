@@ -4,15 +4,16 @@ use App\Models\DokumenInformasi;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 
 new class extends Component {
     use WithFileUploads;
     public $list_dokumen_informasi;
     // Properti untuk menyimpan ID data yang sedang diedit
     public $format_file;
+    public array $form = ['label' => '', 'nama_file' => '', 'format_file' => '', 'keterangan' => ''];
     public ?int $dokumen_informasi_id = null;
     public $old_nama_file = null;
-    public array $form = ['label' => '', 'nama_file' => '', 'format_file' => '', 'keterangan' => ''];
 
     public function mount()
     {
@@ -30,12 +31,67 @@ new class extends Component {
 
     public function save()
     {
-        $this->validate([
-            'form.label' => 'required|string',
+        $rule = $this->dokumen_informasi_id ? 'sometimes' : 'required';
+        $rules = [
+            'form.label' => 'required|string|max:255',
             'form.format_file' => 'required|in:csv,docx,pdf',
-            'form.nama_file' => 'nullable|file|mimes:csv,docx,pdf|max:1200',
             'form.keterangan' => 'required|string',
-        ]);
+            'form.nama_file' => $rule . '|file|mimes:csv,docx,pdf|max:1200',
+        ];
+        $validated = $this->validate($rules);
+        // 1. Ambil nama file lama sebagai default
+        $fileName = $this->old_nama_file;
+        // 2. Jika ada file yang di-upload
+        if (isset($this->form['nama_file']) && is_object($this->form['nama_file'])) {
+            $file = $this->form['nama_file'];
+            $fileName = $file->hashName();
+            $file->storeAs('dokumen-informasi', $fileName, 'public');
+            // Hapus file lama ketika mode edit
+            if ($this->dokumen_informasi_id && $this->old_nama_file) {
+                Storage::disk('public')->delete('dokumen-informasi/' . $this->old_nama_file);
+            }
+        }
+        // 3. Simpan ke Database
+        DokumenInformasi::updateOrCreate(
+            ['id' => $this->dokumen_informasi_id],
+            [
+                'label' => $this->form['label'],
+                'nama_file' => $fileName,
+                'format_file' => $this->form['format_file'],
+                'keterangan' => $this->form['keterangan'],
+            ],
+        );
+        $this->list_dokumen_informasi = DokumenInformasi::all();
+        session()->flash('message', $this->dokumen_informasi_id ? 'Dokumen berhasil diperbarui!' : 'Dokumen berhasil disimpan!');
+        $this->resetForm();
+    }
+
+    public function edit(DokumenInformasi $dokumen_informasi)
+    {
+        $this->resetForm();
+        $this->dokumen_informasi_id = $dokumen_informasi->id;
+        $this->old_nama_file = $dokumen_informasi->nama_file;
+        $this->form = [
+            'label' => $dokumen_informasi->label,
+            // 'nama_file' => $dokumen_informasi->nama_file,
+            'format_file' => $dokumen_informasi->format_file,
+            'keterangan' => $dokumen_informasi->keterangan,
+        ];
+    }
+
+    public function delete(DokumenInformasi $dokumen_informasi)
+    {
+        Storage::disk('public')->delete('dokumen-informasi/' . $dokumen_informasi->nama_file);
+        $dokumen_informasi->delete();
+        $this->list_dokumen_informasi = DokumenInformasi::all();
+        session()->flash('message', 'Data dokumen informasi berhasil dihapus!');
+        $this->resetForm();
+    }
+
+    public function resetForm()
+    {
+        $this->reset(['form', 'dokumen_informasi_id', 'old_nama_file']);
+        $this->resetValidation();
     }
 };
 ?>
@@ -70,7 +126,7 @@ new class extends Component {
                                         <td class="text-center fw-semibold" style="min-width: 40px;">
                                             {{ $loop->iteration }}</td>
                                         <td class="text-center">
-                                            <a href="{{ asset('assets/dokumen-informasi/' . $dokumen_informasi->nama_file) }}"
+                                            <a href="{{ asset('storage/dokumen-informasi/' . $dokumen_informasi->nama_file) }}"
                                                 target="_blank">
                                                 <x-partials.forms.action-button icon="bi-eye" label="Lihat"
                                                     color="primary" />
@@ -120,8 +176,11 @@ new class extends Component {
                             phr="Masukkan Keterangan"></x-partials.forms.text-area>
 
                         <x-partials.forms.input-file name="form.nama_file" label="Dokumen" accept=".pdf,.csv,.docx"
-                            maxSize="1.2MB" formatDesc="PDF" :oldFile="$old_nama_file" folderPath="assets/dokumen-informasi"
-                            icon="bi-file-earmark-pdf" />
+                            maxSize="1.2MB" formatDesc="docx,pdf,csv" :oldFile="$old_nama_file"
+                            folderPath="assets/dokumen-informasi" icon="bi bi-eye" />
+                        @if ($dokumen_informasi_id)
+                            <small class="text-primary mt-0">{{ $old_nama_file }}</small>
+                        @endif
                     </div>
                     <div class="d-flex justify-content-end mt-4">
                         @if ($dokumen_informasi_id)

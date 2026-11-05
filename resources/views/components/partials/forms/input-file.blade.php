@@ -27,7 +27,7 @@
         @if ($oldFile)
             <a href="{{ asset('storage/' . $folderPath . '/' . $oldFile) }}" target="_blank"
                 class="btn btn-warning text-dark fw-bold d-flex align-items-center">
-                <i class="bi {{ $icon }} me-1"></i> Preview
+                <i class="bi {{ $icon }} me-1"></i> Lihat File
             </a>
         @endif
     </div>
