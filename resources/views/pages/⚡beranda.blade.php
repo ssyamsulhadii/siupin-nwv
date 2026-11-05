@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\DokumenInformasi;
+use App\Models\DokumenPendukung;
 use Livewire\Component;
 
 new class extends Component {
@@ -8,7 +8,7 @@ new class extends Component {
 
     public function mount()
     {
-        $this->list_dokumen_informasi = DokumenInformasi::where('format_file', 'docx')->get();
+        $this->list_dokumen_informasi = DokumenPendukung::where('format_file', 'docx')->get();
     }
 };
 ?>
@@ -177,7 +177,7 @@ new class extends Component {
                                 @empty
                                     <div class="text-center py-3 text-muted small">
                                         <i class="bi bi-folder-x fs-4 d-block mb-1"></i>
-                                        Belum ada dokumen informasi.
+                                        Belum ada dokumen pendukung.
                                     </div>
                                 @endforelse
                             </div>

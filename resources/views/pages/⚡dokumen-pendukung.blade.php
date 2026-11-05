@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\DokumenInformasi;
+use App\Models\DokumenPendukung;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Collection;
@@ -8,16 +8,16 @@ use Illuminate\Support\Facades\File;
 
 new class extends Component {
     use WithFileUploads;
-    public $list_dokumen_informasi;
+    public $list_dokumen_pendukung;
     // Properti untuk menyimpan ID data yang sedang diedit
     public $format_file;
     public array $form = ['label' => '', 'nama_file' => '', 'format_file' => '', 'keterangan' => ''];
-    public ?int $dokumen_informasi_id = null;
+    public ?int $dokumen_pendukung_id = null;
     public $old_nama_file = null;
 
     public function mount()
     {
-        $this->list_dokumen_informasi = DokumenInformasi::all();
+        $this->list_dokumen_pendukung = DokumenPendukung::all();
 
         $data_format_file = [['id' => 'docx', 'nama' => 'docx'], ['id' => 'pdf', 'nama' => 'pdf'], ['id' => 'csv', 'nama' => 'csv']];
         $format_file = collect($data_format_file)->map(
@@ -31,7 +31,7 @@ new class extends Component {
 
     public function save()
     {
-        $rule = $this->dokumen_informasi_id ? 'sometimes' : 'required';
+        $rule = $this->dokumen_pendukung_id ? 'sometimes' : 'required';
         $rules = [
             'form.label' => 'required|string|max:255',
             'form.format_file' => 'required|in:csv,docx,pdf',
@@ -45,15 +45,15 @@ new class extends Component {
         if (isset($this->form['nama_file']) && is_object($this->form['nama_file'])) {
             $file = $this->form['nama_file'];
             $fileName = $file->hashName();
-            $file->storeAs('dokumen-informasi', $fileName, 'public');
+            $file->storeAs('dokumen-pendukung', $fileName, 'public');
             // Hapus file lama ketika mode edit
-            if ($this->dokumen_informasi_id && $this->old_nama_file) {
-                Storage::disk('public')->delete('dokumen-informasi/' . $this->old_nama_file);
+            if ($this->dokumen_pendukung_id && $this->old_nama_file) {
+                Storage::disk('public')->delete('dokumen-pendukung/' . $this->old_nama_file);
             }
         }
         // 3. Simpan ke Database
-        DokumenInformasi::updateOrCreate(
-            ['id' => $this->dokumen_informasi_id],
+        DokumenPendukung::updateOrCreate(
+            ['id' => $this->dokumen_pendukung_id],
             [
                 'label' => $this->form['label'],
                 'nama_file' => $fileName,
@@ -61,37 +61,46 @@ new class extends Component {
                 'keterangan' => $this->form['keterangan'],
             ],
         );
-        $this->list_dokumen_informasi = DokumenInformasi::all();
-        session()->flash('message', $this->dokumen_informasi_id ? 'Dokumen berhasil diperbarui!' : 'Dokumen berhasil disimpan!');
+        $this->list_dokumen_pendukung = DokumenPendukung::all();
+        session()->flash('message', $this->dokumen_pendukung_id ? 'Dokumen berhasil diperbarui!' : 'Dokumen berhasil disimpan!');
         $this->resetForm();
     }
 
-    public function edit(DokumenInformasi $dokumen_informasi)
+    public function edit(DokumenPendukung $dokumen_pendukung)
     {
         $this->resetForm();
-        $this->dokumen_informasi_id = $dokumen_informasi->id;
-        $this->old_nama_file = $dokumen_informasi->nama_file;
+        $this->dokumen_pendukung_id = $dokumen_pendukung->id;
+        $this->old_nama_file = $dokumen_pendukung->nama_file;
         $this->form = [
-            'label' => $dokumen_informasi->label,
-            // 'nama_file' => $dokumen_informasi->nama_file,
-            'format_file' => $dokumen_informasi->format_file,
-            'keterangan' => $dokumen_informasi->keterangan,
+            'label' => $dokumen_pendukung->label,
+            'format_file' => $dokumen_pendukung->format_file,
+            'keterangan' => $dokumen_pendukung->keterangan,
         ];
     }
 
-    public function delete(DokumenInformasi $dokumen_informasi)
+    public function delete(DokumenPendukung $dokumen_pendukung)
     {
-        Storage::disk('public')->delete('dokumen-informasi/' . $dokumen_informasi->nama_file);
-        $dokumen_informasi->delete();
-        $this->list_dokumen_informasi = DokumenInformasi::all();
-        session()->flash('message', 'Data dokumen informasi berhasil dihapus!');
+        Storage::disk('public')->delete('dokumen-pendukung/' . $dokumen_pendukung->nama_file);
+        $dokumen_pendukung->delete();
+        $this->list_dokumen_pendukung = DokumenPendukung::all();
+        session()->flash('message', 'Data dokumen pendukung berhasil dihapus!');
         $this->resetForm();
     }
 
     public function resetForm()
     {
-        $this->reset(['form', 'dokumen_informasi_id', 'old_nama_file']);
+        $this->reset(['form', 'dokumen_pendukung_id', 'old_nama_file']);
         $this->resetValidation();
+    }
+
+    public function validationAttributes()
+    {
+        return [
+            'form.label' => 'label',
+            'form.nama_file' => 'nama file',
+            'form.format_file' => 'format file',
+            'form.keterangan' => 'keterangan',
+        ];
     }
 };
 ?>
@@ -105,7 +114,7 @@ new class extends Component {
                 <section class="panel">
                     <div class="panel-header">
                         <h2 class="h5 mb-1 section-title"><i class="bi bi-table" aria-hidden="true"></i>
-                            <span>Daftar Jenis Pensiun</span>
+                            <span>Daftar Dokumen Pendukung</span>
                         </h2>
                         <x-partials.feedback.alert />
                     </div>
@@ -121,28 +130,28 @@ new class extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($list_dokumen_informasi as $dokumen_informasi)
+                                @foreach ($list_dokumen_pendukung as $dokumen_pendukung)
                                     <tr>
                                         <td class="text-center fw-semibold" style="min-width: 40px;">
                                             {{ $loop->iteration }}</td>
                                         <td class="text-center">
-                                            <a href="{{ asset('storage/dokumen-informasi/' . $dokumen_informasi->nama_file) }}"
+                                            <a href="{{ asset('storage/dokumen-pendukung/' . $dokumen_pendukung->nama_file) }}"
                                                 target="_blank">
                                                 <x-partials.forms.action-button icon="bi-eye" label="Lihat"
                                                     color="primary" />
                                             </a>
                                         </td>
-                                        <td>{{ $dokumen_informasi->label }}</td>
-                                        <td>{{ $dokumen_informasi->keterangan }}</td>
+                                        <td>{{ $dokumen_pendukung->label }}</td>
+                                        <td>{{ $dokumen_pendukung->keterangan }}</td>
                                         <td class="text-center">
                                             <div class="d-flex align-items-center justify-content-center gap-1"
                                                 role="group" aria-label="Aksi Jenis Pensiun">
                                                 <!-- Tombol Ubah / Edit -->
                                                 <x-partials.forms.action-button icon="bi-pencil" label="Ubah"
-                                                    color="warning" wireClick="edit({{ $dokumen_informasi->id }})" />
+                                                    color="warning" wireClick="edit({{ $dokumen_pendukung->id }})" />
                                                 <!-- Tombol Hapus -->
                                                 <x-partials.forms.action-button icon="bi-trash" label="Hapus"
-                                                    color="danger" wireClick="delete({{ $dokumen_informasi->id }})" />
+                                                    color="danger" wireClick="delete({{ $dokumen_pendukung->id }})" />
                                             </div>
                                         </td>
                                     </tr>
@@ -159,7 +168,7 @@ new class extends Component {
                     <div class="panel-header">
                         <div>
                             <h2 class="h5 mb-1 section-title"><i class="bi bi-ui-checks-grid"
-                                    aria-hidden="true"></i><span>Form Information</span></h2>
+                                    aria-hidden="true"></i><span>Form Informasi</span></h2>
                             <p class="text-muted mb-0">Isi Form Berikut.</p>
                         </div>
 
@@ -177,16 +186,16 @@ new class extends Component {
 
                         <x-partials.forms.input-file name="form.nama_file" label="Dokumen" accept=".pdf,.csv,.docx"
                             maxSize="1.2MB" formatDesc="docx,pdf,csv" :oldFile="$old_nama_file"
-                            folderPath="assets/dokumen-informasi" icon="bi bi-eye" />
-                        @if ($dokumen_informasi_id)
+                            folderPath="assets/dokumen-pendukung" icon="bi bi-eye" />
+                        @if ($dokumen_pendukung_id)
                             <small class="text-primary mt-0">{{ $old_nama_file }}</small>
                         @endif
                     </div>
                     <div class="d-flex justify-content-end mt-4">
-                        @if ($dokumen_informasi_id)
+                        @if ($dokumen_pendukung_id)
                             <button type="button" wire:click="resetForm" class="btn btn-secondary me-2">Batal</button>
                         @endif
-                        <x-partials.forms.submit target="save" :is-update="(bool) $dokumen_informasi_id" />
+                        <x-partials.forms.submit target="save" :is-update="(bool) $dokumen_pendukung_id" />
                     </div>
                 </form>
             </div>

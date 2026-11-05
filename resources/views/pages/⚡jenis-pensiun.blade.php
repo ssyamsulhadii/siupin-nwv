@@ -129,7 +129,7 @@ new class extends Component {
                     <div class="panel-header">
                         <div>
                             <h2 class="h5 mb-1 section-title"><i class="bi bi-ui-checks-grid"
-                                    aria-hidden="true"></i><span>Form Information</span></h2>
+                                    aria-hidden="true"></i><span>Form Informasi</span></h2>
                             <p class="text-muted mb-0">Isi Form Berikut.</p>
                         </div>
 

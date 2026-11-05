@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dokumen_informasi', function (Blueprint $table) {
+        Schema::create('dokumen_pendukung', function (Blueprint $table) {
             $table->id();
             $table->string('label'); //yang ditampilkan sebagai view informasi data-pns.csv
             $table->string('nama_file'); //hasname KeKdPgOn5qKQ.csv
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dokumen_informasi');
+        Schema::dropIfExists('dokumen_pendukung');
     }
 };

@@ -13,7 +13,7 @@ Route::livewire('/manajemen-user', 'pages::manajemen-user')->name('manajemen-use
 
 Route::livewire('/data-pemohon', 'pages::data-pemohon')->name('data-pemohon')->middleware('auth');
 Route::livewire('/data-statistik', 'pages::data-statistik')->name('data-statistik')->middleware('auth');
-Route::livewire('/dokumen-informasi', 'pages::dokumen-informasi')->name('dokumen-informasi')->middleware('auth');
+Route::livewire('/dokumen-pendukung', 'pages::dokumen-pendukung')->name('dokumen-pendukung')->middleware('auth');
 
 
 

@@ -67,10 +67,10 @@
                     </a>
 
                     <!-- Menu Manajemen User -->
-                    <a class="nav-link {{ request()->routeIs('dokumen-informasi') ? 'active' : '' }}"
-                        href="{{ route('dokumen-informasi') }}">
+                    <a class="nav-link {{ request()->routeIs('dokumen-pendukung') ? 'active' : '' }}"
+                        href="{{ route('dokumen-pendukung') }}">
                         <span class="nav-icon"><i class="bi bi-folder2-open" aria-hidden="true"></i></span>
-                        <span class="nav-text">Dokumen Informasi</span>
+                        <span class="nav-text">Dokumen Pendukung</span>
                     </a>
                 @endauth
 
