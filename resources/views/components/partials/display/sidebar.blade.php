@@ -30,48 +30,57 @@
                 @endguest
 
                 @auth
+                    @if (Auth::user()->level == 'admin')
+                        <!-- Menu Data Statistik -->
+                        <a class="nav-link {{ request()->routeIs('data-statistik') ? 'active' : '' }}"
+                            href="{{ route('data-statistik') }}">
+                            <span class="nav-icon"><i class="bi bi-clipboard-data" aria-hidden="true"></i></span>
+                            <span class="nav-text">Data Statistik</span>
+                        </a>
 
-                    <!-- Menu Data Statistik -->
-                    <a class="nav-link {{ request()->routeIs('data-statistik') ? 'active' : '' }}"
-                        href="{{ route('data-statistik') }}">
-                        <span class="nav-icon"><i class="bi bi-clipboard-data" aria-hidden="true"></i></span>
-                        <span class="nav-text">Data Statistik</span>
-                    </a>
+                        <!-- Menu Data Pemohon -->
+                        <a class="nav-link {{ request()->routeIs('data-pemohon') ? 'active' : '' }}"
+                            href="{{ route('data-pemohon') }}">
+                            <span class="nav-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
+                            <span class="nav-text">Data Pemohon</span>
+                        </a>
 
-                    <!-- Menu Data Pemohon -->
-                    <a class="nav-link {{ request()->routeIs('data-pemohon') ? 'active' : '' }}"
-                        href="{{ route('data-pemohon') }}">
-                        <span class="nav-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
-                        <span class="nav-text">Data Pemohon</span>
-                    </a>
+                        <!-- Menu Jenis Pensiun -->
+                        <a class="nav-link {{ request()->routeIs('jenis-pensiun') ? 'active' : '' }}"
+                            href="{{ route('jenis-pensiun') }}">
+                            <span class="nav-icon"><i class="bi bi-list-check" aria-hidden="true"></i></span>
+                            <span class="nav-text">Jenis Pensiun</span>
+                        </a>
 
-                    <!-- Menu Jenis Pensiun -->
-                    <a class="nav-link {{ request()->routeIs('jenis-pensiun') ? 'active' : '' }}"
-                        href="{{ route('jenis-pensiun') }}">
-                        <span class="nav-icon"><i class="bi bi-list-check" aria-hidden="true"></i></span>
-                        <span class="nav-text">Jenis Pensiun</span>
-                    </a>
+                        <!-- Menu Jabatan Nominatif -->
+                        <a class="nav-link {{ request()->routeIs('jabatan-nominatif') ? 'active' : '' }}"
+                            href="{{ route('jabatan-nominatif') }}">
+                            <span class="nav-icon"><i class="bi bi-file-text" aria-hidden="true"></i></span>
+                            <span class="nav-text">Jabatan Nominatif</span>
+                        </a>
 
-                    <!-- Menu Jabatan Nominatif -->
-                    <a class="nav-link {{ request()->routeIs('jabatan-nominatif') ? 'active' : '' }}"
-                        href="{{ route('jabatan-nominatif') }}">
-                        <span class="nav-icon"><i class="bi bi-file-text" aria-hidden="true"></i></span>
-                        <span class="nav-text">Jabatan Nominatif</span>
-                    </a>
+                        <!-- Menu Manajemen User -->
+                        <a class="nav-link {{ request()->routeIs('manajemen-user') ? 'active' : '' }}"
+                            href="{{ route('manajemen-user') }}">
+                            <span class="nav-icon"><i class="bi bi-person-gear" aria-hidden="true"></i></span>
+                            <span class="nav-text">Manajemen User</span>
+                        </a>
 
-                    <!-- Menu Manajemen User -->
-                    <a class="nav-link {{ request()->routeIs('manajemen-user') ? 'active' : '' }}"
-                        href="{{ route('manajemen-user') }}">
-                        <span class="nav-icon"><i class="bi bi-person-gear" aria-hidden="true"></i></span>
-                        <span class="nav-text">Manajemen User</span>
-                    </a>
-
-                    <!-- Menu Manajemen User -->
-                    <a class="nav-link {{ request()->routeIs('dokumen-pendukung') ? 'active' : '' }}"
-                        href="{{ route('dokumen-pendukung') }}">
-                        <span class="nav-icon"><i class="bi bi-folder2-open" aria-hidden="true"></i></span>
-                        <span class="nav-text">Dokumen Pendukung</span>
-                    </a>
+                        <!-- Menu Manajemen User -->
+                        <a class="nav-link {{ request()->routeIs('dokumen-pendukung') ? 'active' : '' }}"
+                            href="{{ route('dokumen-pendukung') }}">
+                            <span class="nav-icon"><i class="bi bi-folder2-open" aria-hidden="true"></i></span>
+                            <span class="nav-text">Dokumen Pendukung</span>
+                        </a>
+                    @endif
+                    @if (Auth::user()->level == 'member')
+                        <!-- Menu Usul Pensiun -->
+                        <a class="nav-link {{ request()->routeIs('usul-pensiun.create') ? 'active' : '' }}"
+                            href="{{ route('usul-pensiun.create') }}">
+                            <span class="nav-icon"><i class="bi bi-send-check" aria-hidden="true"></i></span>
+                            <span class="nav-text">Usul Pensiun</span>
+                        </a>
+                    @endif
                 @endauth
 
                 @auth

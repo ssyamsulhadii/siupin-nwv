@@ -132,7 +132,6 @@ new class extends Component {
                                     aria-hidden="true"></i><span>Form Informasi</span></h2>
                             <p class="text-muted mb-0">Isi Form Berikut.</p>
                         </div>
-
                     </div>
                     <div class="row g-3">
                         <x-partials.forms.input name="form.nama" label="Nama Jenis Pensiun" wire:model="form.nama"
