@@ -40,27 +40,44 @@
         {{-- Data Diri Input --}}
         <div class="row">
             <div class="col-lg-6">
-                <x-partials.forms.select name="form_identitas_diri.jenis_pensiun_id" label="Jenis Pensiun"
-                    placeholder="-- Pilih --" :options="$list_jenis_pensiun" wire:model="form_identitas_diri.jenis_pensiun_id" />
-                <x-partials.forms.input setcol="py-3" name="form_identitas_diri.tanggal_pensiun"
+                <x-partials.forms.select setcol="mb-3" name="form_identitas_diri.jenis_pensiun_id"
+                    label="Jenis Pensiun" placeholder="-- Pilih --" :options="$list_jenis_pensiun"
+                    wire:model="form_identitas_diri.jenis_pensiun_id" />
+                <x-partials.forms.input setcol="mb-3" name="form_identitas_diri.tanggal_pensiun"
                     label="Tanggal Pensiun <small class='text-danger'><strong>(Diisi Apabila Selain Jenis Pensiun BUP)</strong></small>"
                     wire:model="form_identitas_diri.tanggal_pensiun" type="date"></x-partials.forms.input>
-                <x-partials.forms.input setcol="py-3" name="form_identitas_diri.nkk" label="Nomor Kattu Keluarg (NKK)"
+                <x-partials.forms.input setcol="mb-3" name="form_identitas_diri.nkk" label="Nomor Kartu Keluarg (NKK)"
                     wire:model="form_identitas_diri.nkk" type="number"></x-partials.forms.input>
-                <x-partials.forms.text-area setcol="12" name="form_identitas_diri.alamat_sekarang"
+                <x-partials.forms.text-area setcol="mb-3" name="form_identitas_diri.alamat_sekarang"
                     label="Alamat Sekarang" wire:model="form_identitas_diri.alamat_sekarang" rows="3"
                     phr="Jln Pemuda KM 5.5"></x-partials.forms.text-area>
+                <x-partials.forms.radio-button setcol="mb-3" label="Mempunyai Pasangan/Pernah Punya Pasangan?"
+                    model="form_identitas_diri.mempunyai_pasangan" name="mempunyai_pasangan" option1Text="Ya"
+                    option1Value="1" option2Text="Tidak" option2Value="0" />
+                <div class="form-group ">
+                    <label for="status_pasangan" class="form-label"><strong>Status Pasangan</strong></label>
+                    <select class="form-select " id="status_pasangan" name="status_pasangan">
+                        <option value="">Pilih</option>
+                        <option value="hidup"> Hidup</option>
+                        <option value="meninggal">Meninggal</option>
+                        <option value="bercerai">Bercerai</option>
+                    </select>
+                </div>
             </div>
             <div class="col-lg-6">
-                <x-partials.forms.select name="form_identitas_diri.jabatan_nominatif_id" label="Jabatan Nominatif"
-                    placeholder="-- Pilih --" :options="$list_jabatan_nominatif" wire:model="form_identitas_diri.jabatan_nominatif_id" />
-                <x-partials.forms.input setcol="py-3" name="form_identitas_diri.jabatan" label="Nama Jabatan"
+                <x-partials.forms.select setcol="mb-3" name="form_identitas_diri.jabatan_nominatif_id"
+                    label="Jabatan Nominatif" placeholder="-- Pilih --" :options="$list_jabatan_nominatif"
+                    wire:model="form_identitas_diri.jabatan_nominatif_id" />
+                <x-partials.forms.input setcol="mb-3" name="form_identitas_diri.jabatan" label="Nama Jabatan"
                     wire:model="form_identitas_diri.jabatan"></x-partials.forms.input>
-                <x-partials.forms.input setcol="py-3" name="form_identitas_diri.telpon" label="Nomor Telpon"
+                <x-partials.forms.input setcol="mb-3" name="form_identitas_diri.telpon" label="Nomor Telpon"
                     wire:model="form_identitas_diri.telpon" type="number"></x-partials.forms.input>
-                <x-partials.forms.text-area setcol="12" name="form_identitas_diri.alamat_pensiun"
+                <x-partials.forms.text-area setcol="mb-3" name="form_identitas_diri.alamat_pensiun"
                     label="Alamat Pensiun" wire:model="form_identitas_diri.alamat_pensiun" rows="3"
                     phr="Jln Pemuda KM 5.5"></x-partials.forms.text-area>
+                <x-partials.forms.radio-button setcol="mb-3" label="Mempunyai anak yg menjadi tanggungan?"
+                    model="form_identitas_diri.mempunyai_anak" name="mempunyai_anak" option1Text="Ya"
+                    option1Value="1" option2Text="Tidak" option2Value="0" />
             </div>
         </div>
     </div>

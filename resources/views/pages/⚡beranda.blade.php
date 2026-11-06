@@ -4,11 +4,11 @@ use App\Models\DokumenPendukung;
 use Livewire\Component;
 
 new class extends Component {
-    public $list_dokumen_informasi = null;
+    public $list_dokumen_pendukung = null;
 
     public function mount()
     {
-        $this->list_dokumen_informasi = DokumenPendukung::where('format_file', 'docx')->get();
+        $this->list_dokumen_pendukung = DokumenPendukung::where('format_file', 'docx')->get();
     }
 };
 ?>
@@ -168,11 +168,11 @@ new class extends Component {
                                 Format
                                 Dokumen Pendukung:</span>
                             <div class="list-group list-group-flush small">
-                                @forelse ($list_dokumen_informasi as $dokumen_informasi)
-                                    <a href="{{ asset('storage/dokumen-informasi/' . $dokumen_informasi->nama_file) }}"
+                                @forelse ($list_dokumen_pendukung as $dokumen_pendukung)
+                                    <a href="{{ asset('storage/dokumen-informasi/' . $dokumen_pendukung->nama_file) }}"
                                         target="_blank"
                                         class="list-group-item list-group-item-action py-1 px-2 text-primary">
-                                        <i class="bi bi-file-earmark-word me-1"></i> {{ $dokumen_informasi->label }}
+                                        <i class="bi bi-file-earmark-word me-1"></i> {{ $dokumen_pendukung->label }}
                                     </a>
                                 @empty
                                     <div class="text-center py-3 text-muted small">

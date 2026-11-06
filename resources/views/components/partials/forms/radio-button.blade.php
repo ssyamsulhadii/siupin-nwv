@@ -1,4 +1,5 @@
 @props([
+    'setcol' => 'col-12',
     'label' => 'Label', // Judul di atas radio button
     'model' => '', // Model Livewire (contoh: form.with_tanggal atau status)
     'name' => 'radio_group', // Atribut name/id unik untuk pembeda
@@ -8,7 +9,7 @@
     'option2Value' => '0', // Nilai pilihan kedua
 ])
 
-<div class="col-12">
+<div class="{{ $setcol }}">
     <label class="form-label fw-bold d-block">{{ $label }}</label>
 
     <!-- Pilihan Pertama -->
