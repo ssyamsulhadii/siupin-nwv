@@ -53,10 +53,10 @@
                         </a>
 
                         <!-- Menu Jabatan Nominatif -->
-                        <a class="nav-link {{ request()->routeIs('jabatan-nominatif') ? 'active' : '' }}"
-                            href="{{ route('jabatan-nominatif') }}">
+                        <a class="nav-link {{ request()->routeIs('rumpun-jabatan') ? 'active' : '' }}"
+                            href="{{ route('rumpun-jabatan') }}">
                             <span class="nav-icon"><i class="bi bi-file-text" aria-hidden="true"></i></span>
-                            <span class="nav-text">Jabatan Nominatif</span>
+                            <span class="nav-text">Rumpun Jabatan</span>
                         </a>
 
                         <!-- Menu Manajemen User -->

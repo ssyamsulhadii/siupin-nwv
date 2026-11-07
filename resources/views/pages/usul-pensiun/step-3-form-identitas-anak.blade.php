@@ -13,7 +13,7 @@
         <button type="button" wire:click="$set('step', 2)" class="btn btn-secondary me-2">
             &larr; Sebelumnya
         </button>
-        <button type="button" wire:click="nextStepUploadDokumen" class="btn btn-warning">
+        <button type="button" wire:click="saveIdentitasAnak" class="btn btn-warning">
             Berikutnya &rarr;
         </button>
     </div>

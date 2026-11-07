@@ -186,7 +186,7 @@ new class extends Component {
 
                         <x-partials.forms.input-file name="form.nama_file" label="Dokumen" accept=".pdf,.csv,.docx"
                             maxSize="1.2MB" formatDesc="docx,pdf,csv" :oldFile="$old_nama_file"
-                            folderPath="assets/dokumen-pendukung" icon="bi bi-eye" />
+                            folderPath="storage/dokumen-pendukung" icon="bi bi-eye" />
                         @if ($dokumen_pendukung_id)
                             <small class="text-primary mt-0">{{ $old_nama_file }}</small>
                         @endif

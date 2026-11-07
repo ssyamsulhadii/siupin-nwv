@@ -14,7 +14,7 @@
         {{ $label }}
         @if ($maxSize || $formatDesc)
             <span
-                class="small text-danger">({{ $maxSize ? 'Maks: ' . $maxSize : '' }}{{ $maxSize && $formatDesc ? ', ' : '' }}{{ $formatDesc ? 'Format: ' . $formatDesc : '' }})</span>
+                class="small text-danger fw-bold">({{ $maxSize ? 'Maks: ' . $maxSize : '' }}{{ $maxSize && $formatDesc ? ', ' : '' }}{{ $formatDesc ? 'Format: ' . $formatDesc : '' }})</span>
         @endif
     </label>
 

@@ -14,7 +14,7 @@
 
     <!-- Pilihan Pertama -->
     <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" wire:model="{{ $model }}" id="{{ $name }}_opt1"
+        <input class="form-check-input" type="radio" wire:model.live="{{ $model }}" id="{{ $name }}_opt1"
             value="{{ $option1Value }}">
         <label class="form-check-label" for="{{ $name }}_opt1">
             {{ $option1Text }}
@@ -23,8 +23,8 @@
 
     <!-- Pilihan Kedua -->
     <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" wire:model="{{ $model }}" id="{{ $name }}_opt2"
-            value="{{ $option2Value }}">
+        <input class="form-check-input" type="radio" wire:model.live="{{ $model }}"
+            id="{{ $name }}_opt2" value="{{ $option2Value }}">
         <label class="form-check-label" for="{{ $name }}_opt2">
             {{ $option2Text }}
         </label>

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('username')->unique();
             $table->string('nik')->unique()->nullable();
+            $table->string('nkk')->nullable();
             $table->string('nama')->nullable();
             $table->enum('level', ['admin', 'member'])->default('member'); //admin atau member
             $table->string('password');

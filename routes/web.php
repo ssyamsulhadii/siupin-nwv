@@ -8,9 +8,9 @@ Route::livewire('/masuk', 'pages::account.login')->name('login')->middleware('gu
 Route::livewire('/daftar', 'pages::account.register')->name('register')->middleware('guest');
 
 
-Route::livewire('/jenis-pensiun', 'pages::jenis-pensiun')->name('jenis-pensiun');
 Route::middleware(['auth', 'level:admin'])->group(function () {
-    Route::livewire('/jabatan-nominatif', 'pages::jabatan-nominatif')->name('jabatan-nominatif');
+    Route::livewire('/rumpun-jabatan', 'pages::rumpun-jabatan')->name('rumpun-jabatan');
+    Route::livewire('/jenis-pensiun', 'pages::jenis-pensiun')->name('jenis-pensiun');
     Route::livewire('/manajemen-user', 'pages::manajemen-user')->name('manajemen-user');
 
     Route::livewire('/data-pemohon', 'pages::data-pemohon')->name('data-pemohon');

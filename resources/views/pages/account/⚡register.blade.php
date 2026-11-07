@@ -10,6 +10,7 @@ new #[Layout('layouts.guest')] class extends Component {
     public $password = '';
     public $password_confirmation = '';
     public $nik = '';
+    public $nkk = '';
 
     public function register()
     {
@@ -17,6 +18,7 @@ new #[Layout('layouts.guest')] class extends Component {
             [
                 'username' => ['required', 'digits:18', Rule::in(DataPns::nipList()), 'unique:users,username'],
                 'nik' => 'required|digits:16|unique:users,nik',
+                'nkk' => 'required|digits:16',
                 'password' => 'required|min:6|confirmed',
                 'password_confirmation' => 'required|min:6',
             ],
@@ -66,6 +68,10 @@ new #[Layout('layouts.guest')] class extends Component {
                 <!-- Input Username (NIP) -->
                 <x-partials.forms.input-icon name="username" label="NIP (Nomor Induk Pegawai)" type="number"
                     placeholder="Masukkan NIP" icon="bi-person-badge" wireModel="username" />
+
+                <!-- Input NIK -->
+                <x-partials.forms.input-icon name="nkk" label="NKK (Nomor Kartu Keluarga)" type="number"
+                    placeholder="Masukkan NKK" icon="bi-card-text" wireModel="nkk" />
 
                 <!-- Input NIK -->
                 <x-partials.forms.input-icon name="nik" label="NIK (Nomor Induk Kependudukan)" type="number"

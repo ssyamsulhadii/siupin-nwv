@@ -10,9 +10,9 @@
         {{-- form input --}}
     </div>
     <div class="d-flex justify-content-end mt-4">
-        <button type="button" wire:click="$set('step', 3)" class="btn btn-secondary me-2">
+        <button type="button" wire:click="previousStepFromFinal" class="btn btn-secondary me-2">
             &larr; Sebelumnya
         </button>
-        <button type="button" wire:click="save" class="btn btn-primary">Simpan</button>
+        <button type="button" wire:click="saveFinalData" class="btn btn-primary">Simpan</button>
     </div>
 </div>
