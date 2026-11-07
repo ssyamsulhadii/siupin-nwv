@@ -19,6 +19,7 @@ return new class extends Migration
             $table->char('nik', 16);
             $table->date('tanggal_lahir');
             $table->string('pekerjaan');
+            $table->char('telepon', 15);
             $table->string('nomor_akta');
             $table->date('tanggal_akta');
             $table->string('file_akta');

@@ -164,7 +164,7 @@ new class extends Component {
 
             {{-- Form Input --}}
             <div class="col-12 col-xl-5">
-                <form class="panel needs-validation" wire:submit="save" method="POST">
+                <form class="panel needs-validation" wire:submit="save">
                     <div class="panel-header">
                         <div>
                             <h2 class="h5 mb-1 section-title"><i class="bi bi-ui-checks-grid"

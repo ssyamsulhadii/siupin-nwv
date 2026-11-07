@@ -1,4 +1,4 @@
-<div class="panel needs-validation">
+<form class="panel needs-validation" wire:submit="saveIdentitasPasangan">
     <div class="panel-header">
         <div>
             <h2 class="h5 mb-1 section-title"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i>
@@ -53,8 +53,11 @@
                     label="Tanggal Akta (Menikah/Bercerai/Meninggal)" wire:model="form_identitas_pasangan.tanggal_akta"
                     type="date"></x-partials.forms.input>
                 <x-partials.forms.input-file name="form_identitas_pasangan.file_akta" label="File Akta" accept=".pdf"
-                    maxSize="1MB" formatDesc="pdf" :oldFile="$old_nama_file" folderPath="storage/dokumen-pendukung"
-                    icon="bi bi-eye" />
+                    maxSize="1MB" formatDesc="pdf" oldFile="{{ $pegawai->pasangan?->file_akta }}"
+                    folderPath="dokumen-akta" icon="bi bi-eye" />
+                @if ($pegawai->pasangan)
+                    <small class="text-primary mt-0">{{ $pegawai->pasangan->file_akta }}</small>
+                @endif
             </div>
         </div>
     </div>
@@ -62,8 +65,8 @@
         <button type="button" wire:click="$set('step', 1)" class="btn btn-secondary me-2">
             &larr; Sebelumnya
         </button>
-        <button type="button" wire:click="saveIdentitasPasangan" class="btn btn-warning">
+        <button type="submit" class="btn btn-warning">
             Berikutnya &rarr;
         </button>
     </div>
-</div>
+</form>

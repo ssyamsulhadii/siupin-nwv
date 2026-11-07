@@ -5,8 +5,8 @@ use App\Models\JenisPensiun;
 use App\Models\Pegawai;
 use App\Models\RumpunJabatan;
 use App\Models\Pasangan;
-use Livewire\WithFileUploads;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\File;
 
 new class extends Component {
@@ -15,6 +15,7 @@ new class extends Component {
     public $list_jenis_pensiun;
     public $list_rumpun_jabatan;
     public $pegawai;
+    public $pasangan;
     public $old_nama_file = null;
     public array $data_mapping = [];
     public array $form_identitas_diri = [
@@ -73,6 +74,21 @@ new class extends Component {
                 'mempunyai_anak' => $pegawai->mempunyai_anak,
             ];
             $this->pegawai = $pegawai;
+            if ($pegawai->pasangan) {
+                $this->pasangan = $pegawai->pasangan;
+                $this->form_identitas_pasangan = [
+                    'nama' => $this->pasangan->nama,
+                    'nip' => $this->pasangan->nip,
+                    'nik' => $this->pasangan->nik,
+                    'tanggal_lahir' => $this->pasangan->tanggal_lahir->isoFormat('YYYY-MM-YY'),
+                    'telepon' => $this->pasangan->telepon,
+                    'pekerjaan' => $this->pasangan->pekerjaan,
+                    'nomor_akta' => $this->pasangan->nomor_akta,
+                    'tanggal_akta' => $this->pasangan->tanggal_akta->isoFormat('YYYY-MM-YY'),
+                    // 'file_akta' => $this->pasangan->file_akta,
+                    'pegawai_id' => $this->pasangan->pegawai_id,
+                ];
+            }
         }
         $this->list_jenis_pensiun = JenisPensiun::all();
         $this->list_rumpun_jabatan = RumpunJabatan::all();
@@ -87,7 +103,7 @@ new class extends Component {
             'form_identitas_diri.alamat_sekarang' => 'required|string',
             'form_identitas_diri.rumpun_jabatan_id' => 'required|exists:rumpun_jabatan,id',
             'form_identitas_diri.nama_jabatan' => 'required|string',
-            'form_identitas_diri.telepon' => 'required|numeric',
+            'form_identitas_diri.telepon' => 'required|numeric|digits_between:11,15',
             'form_identitas_diri.alamat_pensiun' => 'required|string',
             'form_identitas_diri.mempunyai_pasangan' => 'required|in:1,0',
             'form_identitas_diri.status_pasangan' => 'required_if:form_identitas_diri.mempunyai_pasangan,1',
@@ -108,20 +124,31 @@ new class extends Component {
     public function saveIdentitasPasangan()
     {
         $this->form_identitas_pasangan['pegawai_id'] = $this->pegawai->id;
+        $rule = $this->pegawai->pasangan ? 'sometimes' : 'required';
         $validated = $this->validate([
             'form_identitas_pasangan.nama' => 'required|string',
             'form_identitas_pasangan.nip' => 'nullable|numeric|digits:18',
             'form_identitas_pasangan.nik' => 'required|numeric|digits:16',
             'form_identitas_pasangan.tanggal_lahir' => 'required|date',
-            'form_identitas_pasangan.telepon' => 'required|numeric',
+            'form_identitas_pasangan.telepon' => 'required|numeric|digits_between:11,15',
             'form_identitas_pasangan.pekerjaan' => 'required|string',
             'form_identitas_pasangan.nomor_akta' => 'required|string',
             'form_identitas_pasangan.tanggal_akta' => 'required|date',
-            'form_identitas_pasangan.file_akta' => 'required|file|mimes:pdf|max:1000',
+            'form_identitas_pasangan.file_akta' => $rule . '|file|mimes:pdf|max:1000',
             'form_identitas_pasangan.pegawai_id' => 'required|exists:pegawai,id',
         ]);
-        dd($validated);
+
+        if (isset($this->form_identitas_pasangan['file_akta']) && is_object($this->form_identitas_pasangan['file_akta'])) {
+            $file = $this->form_identitas_pasangan['file_akta'];
+            $fileName = $file->hashName();
+            $file->storeAs('dokumen-akta', $fileName, 'public');
+            if ($this->pegawai->pasangan) {
+                Storage::disk('public')->delete('dokumen-akta/' . $this->pegawai->pasangan->file_akta);
+            }
+            $validated['form_identitas_pasangan']['file_akta'] = $fileName;
+        }
         $pasangan = Pasangan::updateOrCreate(['pegawai_id' => $this->pegawai->id], $validated['form_identitas_pasangan']);
+        $this->pasangan = $pasangan;
         if ($this->pegawai->mempunyai_anak) {
             $this->step = 3;
         } else {
