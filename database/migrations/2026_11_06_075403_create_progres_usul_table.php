@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('proges_usul', function (Blueprint $table) {
             $table->id();
             $table->string('warna');
-            $table->string('catatan');
+            $table->text('keterangan');
             $table->timestamps();
         });
     }

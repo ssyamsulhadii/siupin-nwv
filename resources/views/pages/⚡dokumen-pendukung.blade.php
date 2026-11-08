@@ -14,6 +14,7 @@ new class extends Component {
     public array $form = ['label' => '', 'nama_file' => '', 'format_file' => '', 'keterangan' => ''];
     public ?int $dokumen_pendukung_id = null;
     public $old_nama_file = null;
+    public ?string $existingFile = null;
 
     public function mount()
     {
@@ -65,6 +66,24 @@ new class extends Component {
         session()->flash('message', $this->dokumen_pendukung_id ? 'Dokumen berhasil diperbarui!' : 'Dokumen berhasil disimpan!');
         $this->resetForm();
     }
+
+    // public function uploadFile()
+    // {
+    //     $this->validate([
+    //         'form.nama_file' => 'required|file|mimes:pdf|max:1024',
+    //     ]);
+    //     $file = $this->form['nama_file'];
+    //     $fileName = $file->hashName();
+    //     $file->storeAs('dokumen-pendukung', $fileName, 'public');
+    //     //  Hapus file lama di storage jika sebelumnya sudah ada
+    //     if (!empty($this->existingFile) && Storage::disk('public')->exists('dokumen-pendukung/' . $this->existingFile)) {
+    //         Storage::disk('public')->delete('dokumen-pendukung/' . $this->existingFile);
+    //     }
+    //     $this->form['nama_file'] = null; //set null agar tombol preview tampil
+    //     // Simpan nama file (string) ke form old nama field untuk kebutuhan database nanti
+    //     $this->existingFile = $fileName;
+    //     session()->flash('upload_success', 'File berhasil diupload');
+    // }
 
     public function edit(DokumenPendukung $dokumen_pendukung)
     {
@@ -184,12 +203,69 @@ new class extends Component {
                             wire:model="form.keterangan" rows="3"
                             phr="Masukkan Keterangan"></x-partials.forms.text-area>
 
-                        <x-partials.forms.input-file name="form.nama_file" label="Dokumen" accept=".pdf,.csv,.docx"
+                        {{-- <x-partials.forms.input-file name="form.nama_file" label="Dokumen" accept=".pdf,.csv,.docx"
                             maxSize="1.2MB" formatDesc="docx,pdf,csv" :oldFile="$old_nama_file" folderPath="dokumen-pendukung"
                             icon="bi bi-eye" />
                         @if ($dokumen_pendukung_id)
                             <small class="text-primary mt-0">{{ $old_nama_file }}</small>
-                        @endif
+                        @endif --}}
+
+                        {{-- metode 2 saat upload dokumen --}}
+                        {{-- <div class="mb-3">
+                            <!-- Label -->
+                            <label class="form-label" for="form.nama_file">
+                                Dokumen <span class="small text-danger fw-bold">(Maks: 1MB, Format: pdf)</span>
+                            </label>
+
+                            <div class="d-flex align-items-center gap-2">
+                                <!-- Input File -->
+                                <input class="form-control @error('form.nama_file') is-invalid @enderror flex-grow-1"
+                                    id="form.nama_file" type="file" accept=".pdf" wire:model="form.nama_file">
+
+                                @if ($form['nama_file'])
+                                    <!-- KONDISI 1: File baru dipilih -> Tampilkan tombol UPLOAD -->
+                                    <button type="button" wire:click="uploadFile" wire:loading.attr="disabled"
+                                        class="btn btn-secondary text-white text-nowrap">
+                                        <span wire:loading.remove wire:target="uploadFile">
+                                            <i class="bi bi-upload me-1"></i> Upload
+                                        </span>
+                                        <span wire:loading wire:target="uploadFile">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span> Menyimpan...
+                                        </span>
+                                    </button>
+                                @elseif ($existingFile)
+                                    <!-- KONDISI 2: Sudah ada file tersimpan & tidak sedang memilih file baru -> Tampilkan PREVIEW -->
+                                    <a href="{{ Storage::url('dokumen-pendukung' / $existingFile) }}" target="_blank"
+                                        class="btn btn-warning text-white text-nowrap">
+                                        <i class="bi bi-eye me-1"></i> Preview
+                                    </a>
+                                @else
+                                    <!-- KONDISI 3: Belum ada file sama sekali -> Tombol Upload Disabled -->
+                                    <button type="button" class="btn btn-outline-secondary text-nowrap" disabled>
+                                        <i class="bi bi-upload me-1"></i> Upload
+                                    </button>
+                                @endif
+                            </div>
+
+                            <!-- Error Handling -->
+                            @error('form.nama_file')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+
+                            <!-- Indikator Loading saat file dipilih (proses temporary) -->
+                            <div wire:loading wire:target="form.nama_file" class="text-primary small mt-1">
+                                <i class="spinner-border spinner-border-sm"></i> Sedang memproses file...
+                            </div>
+
+                            <!-- Pesan Sukses Upload -->
+                            @if (session()->has('upload_success'))
+                                <div class="text-success small mt-1 fw-semibold">
+                                    <i class="bi bi-check-circle me-1"></i> {{ session('upload_success') }}
+                                </div>
+                            @endif
+                        </div> --}}
+
                     </div>
                     <div class="d-flex justify-content-end mt-4">
                         @if ($dokumen_pendukung_id)

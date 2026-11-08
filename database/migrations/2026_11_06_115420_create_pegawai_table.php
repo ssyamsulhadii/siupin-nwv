@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('unit_organisasi', 128);
             $table->string('pangkat_golongan', 56);
             $table->enum('jenis_kelamin', ['L', 'P']);
-            $table->foreignId('user_id')->constrained()->onDelete('cascade')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
 
             // By Input Data
             $table->foreignIdFor(JenisPensiun::class, 'jenis_pensiun_id')->constrained('jenis_pensiun', 'id')->onDelete('cascade');
@@ -38,10 +38,11 @@ return new class extends Migration
             $table->boolean('mempunyai_pasangan');
             $table->string('status_pasangan')->nullable();
 
-            // By Controll Data
+            // By Controll Data Usul
             $table->tinyInteger('status_usul')->default(0); // 0=Draft 1=Terkirirm 2=Perbaikan 3=Diterima
             $table->date('tanggal_usul')->nullable();
             $table->foreignIdFor(ProgresUsul::class, 'progres_usul_id')->nullable()->constrained('progres_usul', 'id')->onDelete('set null');
+            $table->text('keterangan_usul')->nullable();
             $table->timestamps();
         });
     }
