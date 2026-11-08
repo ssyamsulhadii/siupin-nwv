@@ -16,36 +16,23 @@ new class extends Component {
     public $list_rumpun_jabatan;
     public $pegawai;
     public $pasangan;
+    public $list_anak;
+    public ?int $anak_id = null;
     public $old_nama_file = null;
     public $pathFileAkses;
     public array $data_mapping = [];
-    public array $form_identitas_diri = [
-        'jenis_pensiun_id' => '',
-        'tanggal_pensiun' => null,
-        'alamat_sekarang' => '',
-        'mempunyai_pasangan' => '',
-        'rumpun_jabatan_id' => '',
-        'jabatan' => '',
-        'telepon' => '',
-        'alamat_pensiun' => '',
-        'status_pasangan' => null,
-    ];
-    public array $form_identitas_pasangan = [
-        'nama' => '',
-        'nip' => null,
-        'nik' => '',
-        'tanggal_lahir' => '',
-        'telepon' => '',
-        'pekerjaan' => '',
-        'nomor_akta' => '',
-        'tanggal_akta' => '',
-        'file_akta' => '',
-        'mempunyai_anak' => '',
-        'pegawai_id' => '',
-    ];
+    public array $form_identitas_diri = [];
+    public array $form_identitas_pasangan = [];
+    public array $form_identitas_anak = [];
+    public array $form_upload_dokumen = [];
 
     public function mount()
     {
+        $this->form_identitas_diri = config('propertiUsulPensiun.identitas_diri');
+        $this->form_identitas_pasangan = config('propertiUsulPensiun.identitas_pasangan');
+        $this->form_identitas_anak = config('propertiUsulPensiun.identitas_anak');
+        $this->form_dokumen = config('propertiUsulPensiun.upload_dokumen');
+
         $this->pegawai = DataPns::findByNip(Auth::user()->username);
         $this->form_identitas_diri['nama_jabatan'] = $this->pegawai->jabatan;
         $this->data_mapping = [
@@ -60,6 +47,7 @@ new class extends Component {
             'user_id' => Auth::user()->id,
         ];
         $pegawai = Pegawai::firstWhere('nip', $this->pegawai->nip);
+        // Mapping Data Pegawai
         if ($pegawai) {
             $this->form_identitas_diri = [
                 'jenis_pensiun_id' => $pegawai->jenis_pensiun_id,
@@ -74,6 +62,7 @@ new class extends Component {
                 'status_pasangan' => $pegawai->status_pasangan,
             ];
             $this->pegawai = $pegawai;
+            // Mapping Data Pasangan
             if ($pegawai->pasangan) {
                 $this->pasangan = $pegawai->pasangan;
                 $this->form_identitas_pasangan = [
@@ -156,13 +145,27 @@ new class extends Component {
         }
     }
 
-    public function previewFile($id, $folder, $fileName)
-    {
-        $this->pathFileAkses = 'storage/dokumen-pensiun/' . $folder . '/' . $fileName;
-        $this->dispatch('open-modal-' . $id);
-    }
     //berada pada view step-3-form-identitas-anak
-    public function saveIdentitasAnak()
+    public function addIdentitasAnak()
+    {
+        $this->form_identitas_anak['pasangan_id'] = $this->pasangan->id;
+        $rule = $this->anak_id ? 'sometimes' : 'required';
+        $validated = $this->validate([
+            'form_identitas_anak.nama' => 'required|string',
+            'form_identitas_anak.nik' => 'required|numeric|digits:16',
+            'form_identitas_anak.jenis_kelamin' => 'required|in:L,P',
+            'form_identitas_anak.tanggal_lahir' => 'required|date',
+            'form_identitas_anak.telepon' => 'required|numeric|digits_between:11,15',
+            'form_identitas_anak.nomor_akta' => 'required|string',
+            'form_identitas_anak.tanggal_akta' => 'required|date',
+            'form_identitas_anak.file_akta' => $rule . '|file|mimes:pdf|max:1000',
+            'form_identitas_anak.pasangan_id' => 'required|exists:pasangan,id',
+        ]);
+        dd($validated);
+    }
+
+    //berada pada view step-3-form-identitas-anak untuk next step upload dokumen
+    public function nextStepUploadDokumen()
     {
         $this->step = 4;
     }
@@ -183,9 +186,20 @@ new class extends Component {
         }
     }
 
+    public function previewFile($id, $folder, $fileName)
+    {
+        $this->pathFileAkses = 'storage/dokumen-pensiun/' . $folder . '/' . $fileName;
+        $this->dispatch('open-modal-' . $id);
+    }
+
     public function resetForm()
     {
         $this->resetValidation();
+    }
+
+    protected function validationAttributes()
+    {
+        return config('propertiUsulPensiun.attributes');
     }
 };
 ?>

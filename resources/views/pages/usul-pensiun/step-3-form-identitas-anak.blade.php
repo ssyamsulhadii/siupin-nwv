@@ -33,19 +33,23 @@
                     wire:model="form_identitas_anak.nama"></x-partials.forms.input>
                 <x-partials.forms.input setcol="mb-3" name="form_identitas_anak.nik" label="NIK Anak"
                     wire:model="form_identitas_anak.nik" type="number"></x-partials.forms.input>
+                <x-partials.forms.input setcol="mb-3" name="form_identitas_anak.tanggal_lahir" label="Tanggal Lahir"
+                    wire:model="form_identitas_anak.tanggal_lahir" type="date"></x-partials.forms.input>
                 <x-partials.forms.radio-button setcol="mb-3" label="Jenis Kelamin"
                     model="form_identitas_anak.jenis_kelamin" name="jenis_kelamin" option1Text="Lak-Laki"
                     option1Value="L" option2Text="Perempuan" option2Value="P" />
             </div>
             <div class="col-lg-6">
-                <x-partials.forms.input setcol="mb-3" name="form_identitas_anak.tanggal_lahir" label="Tanggal Lahir"
-                    wire:model="form_identitas_anak.tanggal_lahir" type="date"></x-partials.forms.input>
                 <x-partials.forms.input setcol="mb-3" name="form_identitas_anak.telepon" label="Nomor Telepon"
                     wire:model="form_identitas_anak.telepon" type="number"
                     phr="08XX-XXXX-XXXX"></x-partials.forms.input>
-                <x-partials.forms.input-file name="form_identitas_anak.akta_kelahiran" label="Akta Kelahiran"
-                    accept=".pdf" maxSize="1MB" formatDesc="pdf" oldFile="" folderPath="akta-kelahiran"
-                    icon="bi bi-eye" />
+                <x-partials.forms.input setcol="mb-3" name="form_identitas_anak.nomor_akta"
+                    label="Nomor Akta Kelahiran" wire:model="form_identitas_anak.nomor_akta"></x-partials.forms.input>
+                <x-partials.forms.input setcol="mb-3" name="form_identitas_anak.tanggal_akta"
+                    label="Tanggal Akta Kelahiran" wire:model="form_identitas_anak.tanggal_akta"
+                    type="date"></x-partials.forms.input>
+                <x-partials.forms.input-file name="form_identitas_anak.file_akta" label="Dokumen Akta Kelahiran"
+                    accept=".pdf" maxSize="1MB" formatDesc="pdf" />
             </div>
         </div>
     </div>
@@ -54,9 +58,9 @@
             &larr; Sebelumnya
         </button>
         <button type="button" wire:click="addIdentitasAnak" class="btn btn-primary me-2">
-            Tambah Anak
+            <i class="bi bi-plus-circle"></i> Tambah Anak
         </button>
-        <button type="button" wire:click="saveIdentitasAnak" class="btn btn-warning">
+        <button type="button" wire:click="nextStepUploadDokumen" class="btn btn-warning">
             Berikutnya &rarr;
         </button>
     </div>

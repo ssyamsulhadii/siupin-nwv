@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Pegawai;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -27,6 +28,7 @@ return new class extends Migration
             $table->string('pas_foto')->nullable();
             $table->string('pertek_pensiun')->nullable();
             $table->string('sk_pensiun')->nullable();
+            $table->foreignIdFor(Pegawai::class, 'pegawai_id')->constrained('pegawai', 'id')->onDelete('cascade');
             $table->timestamps();
         });
     }
