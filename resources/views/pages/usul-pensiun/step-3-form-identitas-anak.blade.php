@@ -1,10 +1,9 @@
 <div class="panel needs-validation">
     <div class="panel-header">
-        <div>
-            <h2 class="h5 mb-1 section-title"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i>
-                <span class="bg-warning-subtle p-1 rounded px-3">Form Identitas Anak</span>
-            </h2>
-        </div>
+        <h2 class="h5 mb-1 section-title"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i>
+            <span class="bg-warning-subtle p-1 rounded px-3">Form Identitas Anak</span>
+        </h2>
+        <x-partials.feedback.alert />
     </div>
     <div class="row g-3">
         {{-- Data Diri Mapping --}}
@@ -58,7 +57,7 @@
             &larr; Sebelumnya
         </button>
         <button type="button" wire:click="addIdentitasAnak" class="btn btn-primary me-2">
-            <i class="bi bi-plus-circle"></i> Tambah Anak
+            <i class="bi bi-plus-circle"></i> {{ $anak_id ? 'Ubah' : 'Tambah' }} Datah Anak
         </button>
         <button type="button" wire:click="nextStepUploadDokumen" class="btn btn-warning">
             Berikutnya &rarr;
@@ -74,20 +73,45 @@
                     <th class="text-center">Tanggal Lahir</th>
                     <th class="text-center">Jenis Kelamin</th>
                     <th class="text-center">Telepon</th>
-                    <th class="text-center">Akta Kelahiran</th>
+                    <th>Akta Kelahiran</th>
                     <th class="text-center">Menu</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="text-center fw-semibold" style="min-width: 40px;">1</td>
-                    <td>..</td>
-                    <td>..</td>
-                    <td>..</td>
-                    <td>..</td>
-                    <td>..</td>
-                    <td>..</td>
-                </tr>
+                @forelse ($list_anak as $anak)
+                    <tr>
+                        <td class="text-center fw-semibold" style="min-width: 40px;">{{ $loop->iteration }}</td>
+                        <td>{{ $anak->nama }} <br> {{ $anak->nik }}</td>
+                        <td class="text-center">{{ $anak->tanggal_lahir->isoFormat('DD-MM-YYYY') }}</td>
+                        <td class="text-center">{{ $anak->jenis_kelamin == 'L' ? 'Laki Laki' : 'Perempuan' }}</td>
+                        <td class="text-center">{{ $anak->telepon }}</td>
+                        <td>Nomor : {{ $anak->nomor_akta }} <br>
+                            Tanggal : {{ $anak->tanggal_akta->isoFormat('DD-MMMM-YYYY') }} <br>
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex align-items-center justify-content-center gap-1" role="group"
+                                aria-label="Aksi Jenis Pensiun">
+                                <!-- Lihat File -->
+                                <a href="{{ asset('storage/dokumen-pensiun/akta-kelahiran/' . $anak->file_akta) }}"
+                                    target="_blank">
+                                    <x-partials.forms.action-button icon="bi-eye" label="Lihat" color="primary" />
+                                </a>
+                                <!-- Tombol Ubah / Edit -->
+                                <x-partials.forms.action-button icon="bi-pencil" label="Ubah" color="warning"
+                                    wireClick="editIdentitasAnak({{ $anak->id }})" />
+                                <!-- Tombol Hapus -->
+                                <x-partials.forms.action-button icon="bi-trash" label="Hapus" color="danger"
+                                    wireClick="deleteIdentitasAnak({{ $anak->id }})" />
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="7">
+                            <h5 class="text-danger text-center">Data identitas anak belum diinput</h5>
+                        </td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

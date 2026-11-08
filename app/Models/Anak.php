@@ -8,4 +8,5 @@ class Anak extends Model
 {
     protected $table = "anak";
     protected $guarded = [];
+    protected $casts = ['tanggal_lahir' => 'date', 'tanggal_akta' => 'date'];
 }

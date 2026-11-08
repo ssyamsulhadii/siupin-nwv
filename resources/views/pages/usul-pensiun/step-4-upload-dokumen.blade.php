@@ -1,10 +1,8 @@
 <div class="panel needs-validation">
     <div class="panel-header">
-        <div>
-            <h2 class="h5 mb-1 section-title"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i>
-                <span class="bg-warning-subtle p-1 rounded px-3">Form Upload Dokumen</span>
-            </h2>
-        </div>
+        <h2 class="h5 mb-1 section-title"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i>
+            <span class="bg-warning-subtle p-1 rounded px-3">Form Upload Dokumen</span>
+        </h2>
     </div>
     <div class="row g-3">
         {{-- form input --}}

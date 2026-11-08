@@ -5,6 +5,7 @@ use App\Models\JenisPensiun;
 use App\Models\Pegawai;
 use App\Models\RumpunJabatan;
 use App\Models\Pasangan;
+use App\Models\Anak;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +17,7 @@ new class extends Component {
     public $list_rumpun_jabatan;
     public $pegawai;
     public $pasangan;
-    public $list_anak;
+    public $list_anak = null;
     public ?int $anak_id = null;
     public $old_nama_file = null;
     public $pathFileAkses;
@@ -82,6 +83,7 @@ new class extends Component {
         }
         $this->list_jenis_pensiun = JenisPensiun::all();
         $this->list_rumpun_jabatan = RumpunJabatan::all();
+        $this->list_anak = Anak::all();
     }
 
     //berada pada view step-1-form-identitas-diri
@@ -139,6 +141,7 @@ new class extends Component {
         $pasangan = Pasangan::updateOrCreate(['pegawai_id' => $this->pegawai->id], $validated['form_identitas_pasangan']);
         $this->pasangan = $pasangan;
         if ($pasangan->mempunyai_anak) {
+            $this->reset(['form_identitas_anak', 'anak_id']);
             $this->step = 3;
         } else {
             $this->step = 4;
@@ -161,7 +164,44 @@ new class extends Component {
             'form_identitas_anak.file_akta' => $rule . '|file|mimes:pdf|max:1000',
             'form_identitas_anak.pasangan_id' => 'required|exists:pasangan,id',
         ]);
-        dd($validated);
+        if (isset($this->form_identitas_anak['file_akta']) && is_object($this->form_identitas_anak['file_akta'])) {
+            if ($this->anak_id) {
+                Storage::disk('public')->delete('dokumen-pensiun/akta-kelahiran/' . $this->pasangan->file_akta);
+            }
+            $file = $this->form_identitas_anak['file_akta'];
+            $fileName = $file->hashName();
+            $file->storeAs('dokumen-pensiun/akta-kelahiran', $fileName, 'public');
+            $validated['form_identitas_anak']['file_akta'] = $fileName;
+        }
+        Anak::updateOrCreate(['id' => $this->anak_id], $validated['form_identitas_anak']);
+        session()->flash('message', 'Data identitas anak berhasil disimpan!');
+        $this->reset(['form_identitas_anak', 'anak_id']);
+        $this->list_anak = Anak::all();
+    }
+
+    public function editIdentitasAnak(Anak $anak)
+    {
+        $this->anak_id = $anak->id;
+        $this->form_identitas_anak = [
+            'nama' => $anak->nama,
+            'nik' => $anak->nik,
+            'jenis_kelamin' => $anak->jenis_kelamin,
+            'tanggal_lahir' => $anak->tanggal_lahir->isoFormat('YYYY-MM-DD'),
+            'telepon' => $anak->telepon,
+            'nomor_akta' => $anak->nomor_akta,
+            'tanggal_akta' => $anak->tanggal_akta->isoFormat('YYYY-MM-DD'),
+            // 'file_akta' => $anak->file_akta,
+            'pasangan_id' => $anak->id,
+        ];
+    }
+
+    public function deleteIdentitasAnak(Anak $anak)
+    {
+        Storage::disk('public')->delete('dokumen-pensiun/akta-kelahiran/' . $anak->file_akta);
+        $anak->delete();
+        $this->list_anak = Anak::all();
+        session()->flash('message', 'Data identitas anak berhasil dihapus!');
+        $this->reset(['form_identitas_anak']);
     }
 
     //berada pada view step-3-form-identitas-anak untuk next step upload dokumen
