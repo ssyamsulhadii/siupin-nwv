@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\JabatanNominatif;
 use App\Models\JenisPensiun;
+use App\Models\ProgresUsul;
 use App\Models\RumpunJabatan;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -35,10 +35,13 @@ return new class extends Migration
             $table->string('nama_jabatan', 128);
             $table->char('telepon', 15);
             $table->text('alamat_pensiun');
-
             $table->boolean('mempunyai_pasangan');
             $table->string('status_pasangan')->nullable();
-            $table->boolean('mempunyai_anak')->default(false);
+
+            // By Controll Data
+            $table->tinyInteger('status_usul')->default(0); // 0=Draft 1=Terkirirm 2=Perbaikan 3=Diterima
+            $table->date('tanggal_usul')->nullable();
+            $table->foreignIdFor(ProgresUsul::class, 'progres_usul_id')->nullable()->constrained('progres_usul', 'id')->onDelete('set null');
             $table->timestamps();
         });
     }

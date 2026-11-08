@@ -7,6 +7,8 @@
     'oldFile' => null, // Variabel file lama untuk tombol preview ($old_foto / $old_cv)
     'folderPath' => '', // Folder penyimpanan di storage, misal: "upload/foto"
     'icon' => 'bi-file-earmark', // Ikon default Bootstrap Icons untuk tombol preview
+    'wireClick' => null,
+    'byClick' => '',
 ])
 
 <div class="col-12">
@@ -30,6 +32,12 @@
                 <i class="bi {{ $icon }} me-1"></i> Lihat File
             </a>
         @endif
+        @if ($byClick)
+            <button type="button" wire:click="{{ $wireClick }}"
+                class="btn btn-warning text-dark fw-bold d-flex align-items-center">
+                <i class="bi {{ $icon }} me-1"></i> Lihat File
+            </button>
+        @endif
     </div>
 
     <!-- Pesan Error Validasi -->
@@ -45,7 +53,7 @@
     <!-- Indikator Berhasil Tersimpan Otomatis -->
     @if (session()->has('success_' . str_replace('form.', '', $name)))
         <div class="text-success small mt-1">
-            <i class="bi bi-check-circle-fill"></i> {{ session('success_' . str_replace('form.', '', $name)) }}
+            <i class="bi bi-check-circle-fill"></i> Dokumen berhasil diupload.
         </div>
     @endif
 </div>

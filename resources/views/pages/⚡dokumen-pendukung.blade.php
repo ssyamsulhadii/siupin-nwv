@@ -185,8 +185,8 @@ new class extends Component {
                             phr="Masukkan Keterangan"></x-partials.forms.text-area>
 
                         <x-partials.forms.input-file name="form.nama_file" label="Dokumen" accept=".pdf,.csv,.docx"
-                            maxSize="1.2MB" formatDesc="docx,pdf,csv" :oldFile="$old_nama_file"
-                            folderPath="storage/dokumen-pendukung" icon="bi bi-eye" />
+                            maxSize="1.2MB" formatDesc="docx,pdf,csv" :oldFile="$old_nama_file" folderPath="dokumen-pendukung"
+                            icon="bi bi-eye" />
                         @if ($dokumen_pendukung_id)
                             <small class="text-primary mt-0">{{ $old_nama_file }}</small>
                         @endif

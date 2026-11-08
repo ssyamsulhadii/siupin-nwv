@@ -7,7 +7,7 @@ use App\Models\RumpunJabatan;
 use App\Models\Pasangan;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 new class extends Component {
     use WithFileUploads;
@@ -17,6 +17,7 @@ new class extends Component {
     public $pegawai;
     public $pasangan;
     public $old_nama_file = null;
+    public $pathFileAkses;
     public array $data_mapping = [];
     public array $form_identitas_diri = [
         'jenis_pensiun_id' => '',
@@ -28,7 +29,6 @@ new class extends Component {
         'telepon' => '',
         'alamat_pensiun' => '',
         'status_pasangan' => null,
-        'mempunyai_anak' => false,
     ];
     public array $form_identitas_pasangan = [
         'nama' => '',
@@ -40,6 +40,7 @@ new class extends Component {
         'nomor_akta' => '',
         'tanggal_akta' => '',
         'file_akta' => '',
+        'mempunyai_anak' => '',
         'pegawai_id' => '',
     ];
 
@@ -71,7 +72,6 @@ new class extends Component {
                 'telepon' => $pegawai->telepon,
                 'alamat_pensiun' => $pegawai->alamat_pensiun,
                 'status_pasangan' => $pegawai->status_pasangan,
-                'mempunyai_anak' => $pegawai->mempunyai_anak,
             ];
             $this->pegawai = $pegawai;
             if ($pegawai->pasangan) {
@@ -80,11 +80,12 @@ new class extends Component {
                     'nama' => $this->pasangan->nama,
                     'nip' => $this->pasangan->nip,
                     'nik' => $this->pasangan->nik,
-                    'tanggal_lahir' => $this->pasangan->tanggal_lahir->isoFormat('YYYY-MM-YY'),
+                    'tanggal_lahir' => $this->pasangan->tanggal_lahir->isoFormat('YYYY-MM-DD'),
                     'telepon' => $this->pasangan->telepon,
                     'pekerjaan' => $this->pasangan->pekerjaan,
                     'nomor_akta' => $this->pasangan->nomor_akta,
-                    'tanggal_akta' => $this->pasangan->tanggal_akta->isoFormat('YYYY-MM-YY'),
+                    'mempunyai_anak' => $this->pasangan->mempunyai_anak,
+                    'tanggal_akta' => $this->pasangan->tanggal_akta->isoFormat('YYYY-MM-DD'),
                     // 'file_akta' => $this->pasangan->file_akta,
                     'pegawai_id' => $this->pasangan->pegawai_id,
                 ];
@@ -107,7 +108,6 @@ new class extends Component {
             'form_identitas_diri.alamat_pensiun' => 'required|string',
             'form_identitas_diri.mempunyai_pasangan' => 'required|in:1,0',
             'form_identitas_diri.status_pasangan' => 'required_if:form_identitas_diri.mempunyai_pasangan,1',
-            'form_identitas_diri.mempunyai_anak' => 'required_if:form_identitas_diri.mempunyai_pasangan,1',
         ]);
         $item_value = array_merge($this->data_mapping, $validated['form_identitas_diri'] ?? []);
         $pegawai = Pegawai::updateOrCreate(['user_id' => auth()->id()], $item_value);
@@ -115,7 +115,7 @@ new class extends Component {
         if ($pegawai->mempunyai_pasangan) {
             $this->step = 2;
         } else {
-            $pegawai->update(['status_pasangan' => null, 'mempunyai_anak' => false]);
+            $pegawai->update(['status_pasangan' => null]);
             $this->step = 4;
         }
     }
@@ -135,25 +135,31 @@ new class extends Component {
             'form_identitas_pasangan.nomor_akta' => 'required|string',
             'form_identitas_pasangan.tanggal_akta' => 'required|date',
             'form_identitas_pasangan.file_akta' => $rule . '|file|mimes:pdf|max:1000',
+            'form_identitas_pasangan.mempunyai_anak' => 'required|in:1,0',
             'form_identitas_pasangan.pegawai_id' => 'required|exists:pegawai,id',
         ]);
-
         if (isset($this->form_identitas_pasangan['file_akta']) && is_object($this->form_identitas_pasangan['file_akta'])) {
+            if ($this->pegawai->pasangan) {
+                Storage::disk('public')->delete('dokumen-pensiun/dokumen-akta/' . $this->pegawai->pasangan->file_akta);
+            }
             $file = $this->form_identitas_pasangan['file_akta'];
             $fileName = $file->hashName();
-            $file->storeAs('dokumen-akta', $fileName, 'public');
-            if ($this->pegawai->pasangan) {
-                Storage::disk('public')->delete('dokumen-akta/' . $this->pegawai->pasangan->file_akta);
-            }
+            $file->storeAs('dokumen-pensiun/dokumen-akta', $fileName, 'public');
             $validated['form_identitas_pasangan']['file_akta'] = $fileName;
         }
         $pasangan = Pasangan::updateOrCreate(['pegawai_id' => $this->pegawai->id], $validated['form_identitas_pasangan']);
         $this->pasangan = $pasangan;
-        if ($this->pegawai->mempunyai_anak) {
+        if ($pasangan->mempunyai_anak) {
             $this->step = 3;
         } else {
             $this->step = 4;
         }
+    }
+
+    public function previewFile($id, $folder, $fileName)
+    {
+        $this->pathFileAkses = 'storage/dokumen-pensiun/' . $folder . '/' . $fileName;
+        $this->dispatch('open-modal-' . $id);
     }
     //berada pada view step-3-form-identitas-anak
     public function saveIdentitasAnak()
@@ -199,4 +205,7 @@ new class extends Component {
             @endif
         </section>
     </div>
+
+    <x-partials.display.preview-file-modal id="dokumenAktaModal" title="Dokumen Akta" path="{{ $pathFileAkses }}" />
+
 </div>

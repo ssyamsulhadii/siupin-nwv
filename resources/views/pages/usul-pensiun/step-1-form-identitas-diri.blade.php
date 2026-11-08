@@ -69,11 +69,6 @@
                 <x-partials.forms.text-area setcol="mb-3" name="form_identitas_diri.alamat_pensiun"
                     label="Alamat Pensiun" wire:model="form_identitas_diri.alamat_pensiun" rows="3"
                     phr="Jln Pemuda KM 5.5"></x-partials.forms.text-area>
-                @if (isset($form_identitas_diri['mempunyai_pasangan']) && $form_identitas_diri['mempunyai_pasangan'] == '1')
-                    <x-partials.forms.radio-button setcol="mb-3" label="Mempunyai anak yg menjadi tanggungan?"
-                        model="form_identitas_diri.mempunyai_anak" name="mempunyai_anak" option1Text="Ya"
-                        option1Value="1" option2Text="Tidak" option2Value="0" />
-                @endif
             </div>
         </div>
     </div>

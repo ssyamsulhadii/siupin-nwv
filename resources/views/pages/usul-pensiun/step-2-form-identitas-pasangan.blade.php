@@ -1,4 +1,4 @@
-<form class="panel needs-validation" wire:submit="saveIdentitasPasangan">
+<div class="panel needs-validation">
     <div class="panel-header">
         <div>
             <h2 class="h5 mb-1 section-title"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i>
@@ -39,6 +39,9 @@
                 <x-partials.forms.input setcol="mb-3" name="form_identitas_pasangan.tanggal_lahir"
                     label="Tanggal Lahir" wire:model="form_identitas_pasangan.tanggal_lahir"
                     type="date"></x-partials.forms.input>
+                <x-partials.forms.radio-button setcol="mb-3" label="Mempunyai anak yg menjadi tanggungan?"
+                    model="form_identitas_pasangan.mempunyai_anak" name="mempunyai_anak" option1Text="Ya"
+                    option1Value="1" option2Text="Tidak" option2Value="0" />
             </div>
             <div class="col-lg-6">
                 <x-partials.forms.input setcol="mb-3" name="form_identitas_pasangan.telepon" label="Nomor Telepon"
@@ -52,9 +55,11 @@
                 <x-partials.forms.input setcol="mb-3" name="form_identitas_pasangan.tanggal_akta"
                     label="Tanggal Akta (Menikah/Bercerai/Meninggal)" wire:model="form_identitas_pasangan.tanggal_akta"
                     type="date"></x-partials.forms.input>
-                <x-partials.forms.input-file name="form_identitas_pasangan.file_akta" label="File Akta" accept=".pdf"
-                    maxSize="1MB" formatDesc="pdf" oldFile="{{ $pegawai->pasangan?->file_akta }}"
-                    folderPath="dokumen-akta" icon="bi bi-eye" />
+                <x-partials.forms.input-file name="form_identitas_pasangan.file_akta" label="Dokumen Akta"
+                    accept=".pdf" maxSize="1MB" formatDesc="pdf" icon="bi bi-eye"
+                    byClick="{{ $pegawai->pasangan?->file_akta }}"
+                    wireClick="previewFile('dokumenAktaModal','dokumen-akta', '{{ $pegawai->pasangan?->file_akta }}')" />
+
                 @if ($pegawai->pasangan)
                     <small class="text-primary mt-0">{{ $pegawai->pasangan->file_akta }}</small>
                 @endif
@@ -65,8 +70,8 @@
         <button type="button" wire:click="$set('step', 1)" class="btn btn-secondary me-2">
             &larr; Sebelumnya
         </button>
-        <button type="submit" class="btn btn-warning">
+        <button type="button" wire:click="saveIdentitasPasangan" class="btn btn-warning">
             Berikutnya &rarr;
         </button>
     </div>
-</form>
+</div>

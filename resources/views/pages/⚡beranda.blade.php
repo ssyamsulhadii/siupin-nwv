@@ -169,7 +169,7 @@ new class extends Component {
                                 Dokumen Pendukung:</span>
                             <div class="list-group list-group-flush small">
                                 @forelse ($list_dokumen_pendukung as $dokumen_pendukung)
-                                    <a href="{{ asset('storage/dokumen-informasi/' . $dokumen_pendukung->nama_file) }}"
+                                    <a href="{{ asset('storage/dokumen-pendukung/' . $dokumen_pendukung->nama_file) }}"
                                         target="_blank"
                                         class="list-group-item list-group-item-action py-1 px-2 text-primary">
                                         <i class="bi bi-file-earmark-word me-1"></i> {{ $dokumen_pendukung->label }}
