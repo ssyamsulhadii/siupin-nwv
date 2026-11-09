@@ -216,37 +216,60 @@ new class extends Component {
 
     public function uploadFile()
     {
-        // 1. Validasi file
+        // / Konfigurasi dinamis untuk setiap jenis dokumen
+        $config = [
+            'supeng_instansi' => ['folder' => 'supeng-instansi', 'rules' => 'required|file|mimes:pdf|max:750'],
+            'super_pemohon' => ['folder' => 'super-pemohon', 'rules' => 'required|file|mimes:pdf|max:750'],
+            'super_disiplin' => ['folder' => 'super-disiplin', 'rules' => 'required|file|mimes:pdf|max:750'],
+            'super_pidana' => ['folder' => 'super-pidana', 'rules' => 'required|file|mimes:pdf|max:750'],
+            'sk_cpns' => ['folder' => 'sk-cpns', 'rules' => 'required|file|mimes:pdf|max:750'],
+            'sk_pns' => ['folder' => 'sk-pns', 'rules' => 'required|file|mimes:pdf|max:750'],
+            'sk_pangkat_akhir' => ['folder' => 'sk-pangkat-akhir', 'rules' => 'required|file|mimes:pdf|max:750'],
+            'sk_pmk' => ['folder' => 'sk-pmk', 'rules' => 'required|file|mimes:pdf|max:750'],
+            'skp_tahunan' => ['folder' => 'skp-tahunan', 'rules' => 'required|file|mimes:pdf|max:750'],
+            'foto_ktp' => ['folder' => 'foto-ktp', 'rules' => 'required|file|mimes:pdf|max:750'],
+            'foto_kk' => ['folder' => 'foto-kk', 'rules' => 'required|file|mimes:pdf|max:750'],
+            'pas_foto' => ['folder' => 'pas-foto', 'rules' => 'required|file|mimes:jpg,jpeg,png|max:750'], // Khusus gambar
+            'pertek_pensiun' => ['folder' => 'pertek-pensiun', 'rules' => 'required|file|mimes:pdf|max:750'],
+            'sk_pensiun' => ['folder' => 'sk-pensiun', 'rules' => 'required|file|mimes:pdf|max:750'],
+        ];
+
+        if (!array_key_exists($field, $config)) {
+            return;
+        }
+
+        $currentConfig = $config[$field];
+        // 1. Validasi dinamis berdasarkan konfigurasi
         $this->validate([
-            'form_upload_dokumen.supeng_instansi' => 'required|file|mimes:pdf|max:1024',
+            "form_upload_dokumen.{$field}" => $currentConfig['rules'],
         ]);
 
         $dokumen_pensiun = $this->pegawai->dokumenPensiun;
+
+        // 2. Hapus file fisik lama jika ada di storage
+        if ($dokumen_pensiun && $dokumen_pensiun->{$field}) {
+            Storage::disk('public')->delete('dokumen-pensiun/' . $currentConfig['folder'] . '/' . $dokumen_pensiun->{$field});
+        }
 
         // 2. Hapus file fisik lama jika ada (pastikan dicek dulu apakah $dokumen_pensiun ada)
         if ($dokumen_pensiun && $dokumen_pensiun->supeng_instansi) {
             Storage::disk('public')->delete('dokumen-pensiun/supeng-instansi/' . $dokumen_pensiun->supeng_instansi);
         }
 
-        // 3. Simpan file baru ke storage
-        $file = $this->form_upload_dokumen['supeng_instansi'];
+        // 3. Simpan file baru
+        $file = $this->form_upload_dokumen[$field];
         $fileName = $file->hashName();
-        $file->storeAs('dokumen-pensiun/supeng-instansi', $fileName, 'public');
+        $file->storeAs('dokumen-pensiun/' . $currentConfig['folder'], $fileName, 'public');
 
-        // 4. Update atau Create data ke database melalui relasi
-        $this->pegawai->dokumenPensiun()->updateOrCreate(
-            ['pegawai_id' => $this->pegawai->id], // Sesuaikan foreign key tabel dokumen_pensiun Anda
-            ['supeng_instansi' => $fileName],
-        );
+        // 4. Update database via relasi
+        $this->pegawai->dokumenPensiun()->updateOrCreate(['pegawai_id' => $this->pegawai->id], [$field => $fileName]);
 
-        // 5. PENTING: Refresh relasi pegawai agar memori Livewire mendeteksi data terbaru
+        // 5. Refresh memori relasi & reset input form
         $this->pegawai->load('dokumenPensiun');
+        $this->form_upload_dokumen[$field] = null;
 
-        // 6. Reset input file supaya kondisi di Blade berpindah dari "Upload" ke "Preview"
-        $this->form_upload_dokumen['supeng_instansi'] = null;
-
-        // 7. Berikan session flash sukses
-        session()->flash('upload_success', 'File berhasil diupload');
+        // 6. Flash session khusus untuk field ini agar pesannya tidak tertukar
+        session()->flash('upload_success_' . $field, 'File berhasil diupload');
     }
 
     //berada pada view step-4-form-upload-dokumen
@@ -301,7 +324,6 @@ new class extends Component {
     </div>
 
     <x-partials.display.preview-file-modal id="dokumenAktaModal" title="Dokumen Akta" path="{{ $pathFileAkses }}" />
-    <x-partials.display.preview-file-modal id="supengInstansi" title="Dokumen Surat Pengantar"
-        path="{{ $pathFileAkses }}" />
+    {{-- <x-partials.display.preview-file-modal id="supengInstansi" title="Dokumen Surat Pengantar" path="{{ $pathFileAkses }}" /> --}}
 
 </div>

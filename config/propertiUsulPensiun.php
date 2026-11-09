@@ -41,9 +41,20 @@ return [
 
     // Termasuk 14 kolom dokumen Anda nantinya di sini...
     'upload_dokumen' => [
-        'supeng_instansi' => '',
-        // 'dokumen_2' => '',
-        // ... dst sampai 14 kolom
+        'supeng_instansi' => null,
+        'super_pemohon' => null,
+        'super_disiplin' => null,
+        'super_pidana' => null,
+        'sk_cpns' => null,
+        'sk_pns' => null,
+        'sk_pangkat_akhir' => null,
+        'sk_pmk' => null,
+        'skp_tahunan' => null,
+        'foto_ktp' => null,
+        'foto_kk' => null,
+        'pas_foto' => null,
+        'pertek_pensiun' => null,
+        'sk_pensiun' => null,
     ],
 
     'attributes' => [
