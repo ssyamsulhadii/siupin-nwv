@@ -56,7 +56,7 @@
                 <x-partials.forms.input-file name="form_identitas_pasangan.file_akta" label="Dokumen Akta"
                     accept=".pdf" maxSize="1MB" formatDesc="pdf" icon="bi bi-eye"
                     byClick="{{ $pegawai->pasangan?->file_akta }}"
-                    wireClick="previewFile('dokumenAktaModal','dokumen-akta', '{{ $pegawai->pasangan?->file_akta }}')" />
+                    wireClick="previewFile('dokumen-akta', '{{ $pegawai->pasangan?->file_akta }}', 'Dokumen Akta')" />
 
                 @if ($pegawai->pasangan)
                     <small class="text-primary mt-0">{{ $pegawai->pasangan->file_akta }}</small>

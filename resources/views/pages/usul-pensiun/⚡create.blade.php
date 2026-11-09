@@ -20,7 +20,8 @@ new class extends Component {
     public $list_anak = null;
     public ?int $anak_id = null;
     public $old_nama_file = null;
-    public $pathFileAkses;
+    public $pathFileAkses = null;
+    public $titleDokumen = null;
     public array $data_mapping = [];
     public array $form_identitas_diri = [];
     public array $form_identitas_pasangan = [];
@@ -214,7 +215,7 @@ new class extends Component {
         session()->flash('warning', 'Data identitas anak wajib diisi!');
     }
 
-    public function uploadFile()
+    public function uploadFile($field)
     {
         // / Konfigurasi dinamis untuk setiap jenis dokumen
         $config = [
@@ -275,7 +276,19 @@ new class extends Component {
     //berada pada view step-4-form-upload-dokumen
     public function saveFinalData()
     {
-        //
+        $dokumen = $this->pegawai->dokumenPensiun;
+        // 1. Daftar 11 kolom yang WAJIB diisi oleh pemohon/pegawai
+        $kolomWajib = ['supeng_instansi', 'super_pemohon', 'super_disiplin', 'super_pidana', 'sk_cpns', 'sk_pns', 'sk_pangkat_akhir', 'skp_tahunan', 'foto_ktp', 'foto_kk', 'pas_foto'];
+        // 2. Cek apakah semua kolom wajib terisi (tidak ada yang null / kosong)
+        $semuaLengkap = collect($kolomWajib)->every(fn($kolom) => !empty($dokumen->{$kolom}));
+        if (!$semuaLengkap) {
+            session()->flash('warning', 'Data dokumen pensiun tidak lengkap, silakan upload dokumen!');
+            return;
+        }
+        // 3. Jika lolos (11 dokumen wajib terisi), lanjutkan proses finalisasi
+        // (Misal: ubah status usulan, simpan data, dll.)
+
+        session()->flash('success', 'Usulan pensiun berhasil difinalisasi!');
     }
 
     public function previousStepFromFinal()
@@ -289,10 +302,11 @@ new class extends Component {
         }
     }
 
-    public function previewFile($id, $folder, $fileName)
+    public function previewFile($folder, $fileName, $titleDokumen)
     {
+        $this->titleDokumen = $titleDokumen;
         $this->pathFileAkses = 'storage/dokumen-pensiun/' . $folder . '/' . $fileName;
-        $this->dispatch('open-modal-' . $id);
+        $this->dispatch('open-modal-previewModalDokumen');
     }
 
     public function resetForm()
@@ -323,7 +337,7 @@ new class extends Component {
         </section>
     </div>
 
-    <x-partials.display.preview-file-modal id="dokumenAktaModal" title="Dokumen Akta" path="{{ $pathFileAkses }}" />
-    {{-- <x-partials.display.preview-file-modal id="supengInstansi" title="Dokumen Surat Pengantar" path="{{ $pathFileAkses }}" /> --}}
+    <x-partials.display.preview-file-modal id="previewModalDokumen" title="{{ $titleDokumen }}"
+        path="{{ $pathFileAkses }}" />
 
 </div>

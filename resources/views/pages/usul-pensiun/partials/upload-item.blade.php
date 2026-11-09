@@ -35,7 +35,7 @@
         @elseif (optional($pegawai?->dokumenPensiun)->{$field})
             <!-- KONDISI 2: Sudah ada file di DB -> Tombol Preview -->
             <button type="button"
-                wire:click="previewFile('{{ $modalId }}','{{ $folder }}', '{{ $pegawai->dokumenPensiun->{$field} }}')"
+                wire:click="previewFile('{{ $folder }}', '{{ $pegawai->dokumenPensiun->{$field} }}', '{{ $label }}')"
                 class="btn btn-warning text-white text-nowrap">
                 <i class="bi bi-eye me-1"></i> Preview
             </button>
