@@ -59,9 +59,11 @@
         <button type="button" wire:click="addIdentitasAnak" class="btn btn-primary me-2">
             <i class="bi bi-plus-circle"></i> {{ $anak_id ? 'Ubah' : 'Tambah' }} Datah Anak
         </button>
-        <button type="button" wire:click="nextStepUploadDokumen" class="btn btn-warning">
-            Berikutnya &rarr;
-        </button>
+        @if (count($this->list_anak) > 0)
+            <button type="button" wire:click="nextStepUploadDokumen" class="btn btn-warning">
+                Berikutnya &rarr;
+            </button>
+        @endif
     </div>
 
     <div class="table-responsive mt-4">

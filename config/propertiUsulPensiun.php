@@ -41,7 +41,7 @@ return [
 
     // Termasuk 14 kolom dokumen Anda nantinya di sini...
     'upload_dokumen' => [
-        // 'dokumen_1' => '',
+        'supeng_instansi' => '',
         // 'dokumen_2' => '',
         // ... dst sampai 14 kolom
     ],

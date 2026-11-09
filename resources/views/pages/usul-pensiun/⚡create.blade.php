@@ -32,7 +32,7 @@ new class extends Component {
         $this->form_identitas_diri = config('propertiUsulPensiun.identitas_diri');
         $this->form_identitas_pasangan = config('propertiUsulPensiun.identitas_pasangan');
         $this->form_identitas_anak = config('propertiUsulPensiun.identitas_anak');
-        $this->form_dokumen = config('propertiUsulPensiun.upload_dokumen');
+        $this->form_upload_dokumen = config('propertiUsulPensiun.upload_dokumen');
 
         $this->pegawai = DataPns::findByNip(Auth::user()->username);
         $this->form_identitas_diri['nama_jabatan'] = $this->pegawai->jabatan;
@@ -102,6 +102,7 @@ new class extends Component {
         ]);
         $item_value = array_merge($this->data_mapping, $validated['form_identitas_diri'] ?? []);
         $pegawai = Pegawai::updateOrCreate(['user_id' => auth()->id()], $item_value);
+        $pegawai->dokumenPensiun()->updateOrCreate(['pegawai_id' => $pegawai->id], []);
         $this->pegawai = $pegawai;
         if ($pegawai->mempunyai_pasangan) {
             $this->step = 2;
@@ -207,8 +208,47 @@ new class extends Component {
     //berada pada view step-3-form-identitas-anak untuk next step upload dokumen
     public function nextStepUploadDokumen()
     {
-        $this->step = 4;
+        if (count($this->list_anak) > 0) {
+            $this->step = 4;
+        }
+        session()->flash('warning', 'Data identitas anak wajib diisi!');
     }
+
+    public function uploadFile()
+    {
+        // 1. Validasi file
+        $this->validate([
+            'form_upload_dokumen.supeng_instansi' => 'required|file|mimes:pdf|max:1024',
+        ]);
+
+        $dokumen_pensiun = $this->pegawai->dokumenPensiun;
+
+        // 2. Hapus file fisik lama jika ada (pastikan dicek dulu apakah $dokumen_pensiun ada)
+        if ($dokumen_pensiun && $dokumen_pensiun->supeng_instansi) {
+            Storage::disk('public')->delete('dokumen-pensiun/supeng-instansi/' . $dokumen_pensiun->supeng_instansi);
+        }
+
+        // 3. Simpan file baru ke storage
+        $file = $this->form_upload_dokumen['supeng_instansi'];
+        $fileName = $file->hashName();
+        $file->storeAs('dokumen-pensiun/supeng-instansi', $fileName, 'public');
+
+        // 4. Update atau Create data ke database melalui relasi
+        $this->pegawai->dokumenPensiun()->updateOrCreate(
+            ['pegawai_id' => $this->pegawai->id], // Sesuaikan foreign key tabel dokumen_pensiun Anda
+            ['supeng_instansi' => $fileName],
+        );
+
+        // 5. PENTING: Refresh relasi pegawai agar memori Livewire mendeteksi data terbaru
+        $this->pegawai->load('dokumenPensiun');
+
+        // 6. Reset input file supaya kondisi di Blade berpindah dari "Upload" ke "Preview"
+        $this->form_upload_dokumen['supeng_instansi'] = null;
+
+        // 7. Berikan session flash sukses
+        session()->flash('upload_success', 'File berhasil diupload');
+    }
+
     //berada pada view step-4-form-upload-dokumen
     public function saveFinalData()
     {
@@ -261,5 +301,7 @@ new class extends Component {
     </div>
 
     <x-partials.display.preview-file-modal id="dokumenAktaModal" title="Dokumen Akta" path="{{ $pathFileAkses }}" />
+    <x-partials.display.preview-file-modal id="supengInstansi" title="Dokumen Surat Pengantar"
+        path="{{ $pathFileAkses }}" />
 
 </div>
