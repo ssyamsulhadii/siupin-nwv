@@ -54,7 +54,7 @@
                     label="Tanggal Akta (Menikah/Bercerai/Meninggal)" wire:model="form_identitas_pasangan.tanggal_akta"
                     type="date"></x-partials.forms.input>
                 <x-partials.forms.input-file name="form_identitas_pasangan.file_akta" label="Dokumen Akta"
-                    accept=".pdf" maxSize="1MB" formatDesc="pdf" icon="bi bi-eye"
+                    accept=".pdf" maxSize="750kb" formatDesc="pdf" icon="bi bi-eye"
                     byClick="{{ $pegawai->pasangan?->file_akta }}"
                     wireClick="previewFile('dokumen-akta', '{{ $pegawai->pasangan?->file_akta }}', 'Dokumen Akta')" />
 

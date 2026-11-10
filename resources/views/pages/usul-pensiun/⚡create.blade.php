@@ -49,6 +49,13 @@ new class extends Component {
             'user_id' => Auth::user()->id,
         ];
         $pegawai = Pegawai::firstWhere('nip', $this->pegawai->nip);
+
+        // Jika data pegawai ada DAN statusnya 1 (Terkirim) atau 3 (Diterima), maka tolak akses
+        if ($pegawai && in_array($pegawai?->status_usul, [1, 3])) {
+            session()->flash('warning', 'Data usul pensiun sudah terkirim, hubungi admin untuk perbaikan data!');
+            return to_route('usul-pensiun.detail_usulan', ['pegawai' => $pegawai->nip]);
+        }
+
         // Mapping Data Pegawai
         if ($pegawai) {
             $this->form_identitas_diri = [
@@ -127,7 +134,7 @@ new class extends Component {
             'form_identitas_pasangan.pekerjaan' => 'required|string',
             'form_identitas_pasangan.nomor_akta' => 'required|string',
             'form_identitas_pasangan.tanggal_akta' => 'required|date',
-            'form_identitas_pasangan.file_akta' => $rule . '|file|mimes:pdf|max:1000',
+            'form_identitas_pasangan.file_akta' => $rule . '|file|mimes:pdf|max:750',
             'form_identitas_pasangan.mempunyai_anak' => 'required|in:1,0',
             'form_identitas_pasangan.pegawai_id' => 'required|exists:pegawai,id',
         ]);
@@ -163,7 +170,7 @@ new class extends Component {
             'form_identitas_anak.telepon' => 'required|numeric|digits_between:11,15',
             'form_identitas_anak.nomor_akta' => 'required|string',
             'form_identitas_anak.tanggal_akta' => 'required|date',
-            'form_identitas_anak.file_akta' => $rule . '|file|mimes:pdf|max:1000',
+            'form_identitas_anak.file_akta' => $rule . '|file|mimes:pdf|max:750',
             'form_identitas_anak.pasangan_id' => 'required|exists:pasangan,id',
         ]);
         if (isset($this->form_identitas_anak['file_akta']) && is_object($this->form_identitas_anak['file_akta'])) {
@@ -211,8 +218,9 @@ new class extends Component {
     {
         if (count($this->list_anak) > 0) {
             $this->step = 4;
+        } else {
+            session()->flash('warning', 'Data identitas anak wajib diisi!');
         }
-        session()->flash('warning', 'Data identitas anak wajib diisi!');
     }
 
     public function uploadFile($field)
@@ -286,16 +294,20 @@ new class extends Component {
             return;
         }
         // 3. Jika lolos (11 dokumen wajib terisi), lanjutkan proses finalisasi
-        // (Misal: ubah status usulan, simpan data, dll.)
-
+        $this->pegawai->update([
+            'status_usul' => 1,
+            'keterangan_usul' => 'Menunggu verifikasi admin.',
+            'tanggal_usul' => now(),
+        ]);
         session()->flash('success', 'Usulan pensiun berhasil difinalisasi!');
+        return to_route('usul-pensiun.detail_usulan', ['pegawai' => $this->pegawai->nip]);
     }
 
     public function previousStepFromFinal()
     {
-        if ($this->pegawai->mempunyai_pasangan && $this->pegawai->mempunyai_anak) {
+        if ($this->pegawai->mempunyai_pasangan && $this->pasangan->mempunyai_anak) {
             $this->step = 3;
-        } elseif ($this->pegawai->mempunyai_pasangan && !$this->pegawai->mempunyai_anak) {
+        } elseif ($this->pegawai->mempunyai_pasangan && !$this->pasangan->mempunyai_anak) {
             $this->step = 2;
         } else {
             $this->step = 1;

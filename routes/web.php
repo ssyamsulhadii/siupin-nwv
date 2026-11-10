@@ -17,7 +17,8 @@ Route::middleware(['auth', 'level:admin'])->group(function () {
     Route::livewire('/data-statistik', 'pages::data-statistik')->name('data-statistik');
     Route::livewire('/dokumen-pendukung', 'pages::dokumen-pendukung')->name('dokumen-pendukung');
 });
-Route::livewire('/usul-pensiun', 'pages::usul-pensiun.create')->name('usul-pensiun.create');
+Route::livewire('/usul-pensiun/create', 'pages::usul-pensiun.create')->name('usul-pensiun.create');
+Route::livewire('/usul-pensiun/{pegawai}/detail-usulan', 'pages::usul-pensiun.detail-usulan')->name('usul-pensiun.detail_usulan');
 
 
 

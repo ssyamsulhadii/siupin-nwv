@@ -1,4 +1,4 @@
-@props(['name', 'label' => '', 'setcol' => 'col-12', 'value' => ''])
+@props(['name' => '', 'label' => '', 'setcol' => 'col-12', 'value' => ''])
 
 <div class="{{ $setcol }} mb-3">
     @if ($label)

@@ -77,8 +77,14 @@
                         <!-- Menu Usul Pensiun -->
                         <a class="nav-link {{ request()->routeIs('usul-pensiun.create') ? 'active' : '' }}"
                             href="{{ route('usul-pensiun.create') }}">
-                            <span class="nav-icon"><i class="bi bi-send-check" aria-hidden="true"></i></span>
+                            <span class="nav-icon"><i class="bi bi-send" aria-hidden="true"></i></span>
                             <span class="nav-text">Usul Pensiun</span>
+                        </a>
+                        <!-- Menu Detail Usul Pensiun -->
+                        <a class="nav-link {{ request()->routeIs('usul-pensiun.detail_usulan') ? 'active' : '' }}"
+                            href="{{ route('usul-pensiun.detail_usulan', ['pegawai' => Auth::user()->username]) }}">
+                            <span class="nav-icon"><i class="bi bi-info-circle" aria-hidden="true"></i></span>
+                            <span class="nav-text">Detail Usulan</span>
                         </a>
                     @endif
                 @endauth

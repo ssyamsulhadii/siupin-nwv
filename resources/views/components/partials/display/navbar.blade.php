@@ -17,7 +17,7 @@
                 <div class="dropdown">
                     <button class="profile-button dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        <img class="avatar-img avatar-sm" src="{{ asset('assets/images/avatar/account-profile.png') }}">
+                        {{-- <img class="avatar-img avatar-sm" src="{{ asset('assets/images/avatar/account-profile.png') }}"> --}}
                         <span class="d-none d-sm-inline">
                             {{ Auth::user()->nama }}
                         </span>

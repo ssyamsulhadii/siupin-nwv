@@ -113,6 +113,6 @@
         <button type="button" wire:click="previousStepFromFinal" class="btn btn-secondary me-2">
             &larr; Sebelumnya
         </button>
-        <button type="button" wire:click="saveFinalData" class="btn btn-primary">Simpan</button>
+        <button type="button" wire:click="saveFinalData" class="btn btn-primary">Simpan & Selesai</button>
     </div>
 </div>

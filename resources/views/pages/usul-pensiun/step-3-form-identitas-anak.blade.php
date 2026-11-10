@@ -48,7 +48,7 @@
                     label="Tanggal Akta Kelahiran" wire:model="form_identitas_anak.tanggal_akta"
                     type="date"></x-partials.forms.input>
                 <x-partials.forms.input-file name="form_identitas_anak.file_akta" label="Dokumen Akta Kelahiran"
-                    accept=".pdf" maxSize="1MB" formatDesc="pdf" />
+                    accept=".pdf" maxSize="750kb" formatDesc="pdf" />
             </div>
         </div>
     </div>
