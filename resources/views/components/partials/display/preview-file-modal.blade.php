@@ -1,4 +1,4 @@
-@props(['id' => '', 'title' => '', 'path' => 'modal-md'])
+@props(['id' => '', 'title' => '', 'path' => ''])
 
 <x-partials.display.base-modal id="{{ $id }}" title="{{ $title }}" maxWidth='modal-xl'>
     <div class="text-center">

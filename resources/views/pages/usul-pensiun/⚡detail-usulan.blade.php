@@ -6,16 +6,31 @@ use Livewire\Component;
 new class extends Component {
     public $activeTab = 'diri'; // Default tab yang dibuka pertama kali
     public $pegawai;
+    public $pasangan;
+    public $list_anak = null;
+    public $dokumen_pensiun = null;
+    public $pathFileAkses = null;
+    public $titleDokumen = '';
 
     public function mount($pegawai)
     {
         $pegawai = Pegawai::firstWhere('nip', $pegawai);
         $this->pegawai = $pegawai;
+        $this->pasangan = $pegawai?->pasangan;
+    }
+
+    public function previewFile($folder, $fileName, $titleDokumen)
+    {
+        $this->titleDokumen = $titleDokumen;
+        $this->pathFileAkses = 'storage/dokumen-pensiun/' . $folder . '/' . $fileName;
+        $this->dispatch('open-modal-previewModalDokumen');
     }
 };
 ?>
 
 <div>
+    <x-partials.display.preview-file-modal id="previewModalDokumen" title="{{ $titleDokumen }}"
+        path="{{ $pathFileAkses }}" />
     <div class="container-fluid px-3 px-lg-4 py-4">
         <x-partials.display.page-title title="Detail Pensiun"></x-partials.display.page-title>
         <section class="row g-3">
@@ -47,7 +62,7 @@ new class extends Component {
                                     <i class="bi bi-info-circle-fill text-primary fs-4 mt-1"></i>
                                     <div>
                                         <h6 class="fw-bold text-dark mb-1">Catatan / Keterangan Admin:</h6>
-                                        <p class="mb-0 text-secondary fs-6">
+                                        <p class="mb-0 text-danger fs-5">
                                             {{ $pegawai->keterangan_usul }}
                                         </p>
                                     </div>
@@ -105,10 +120,9 @@ new class extends Component {
 
                             <!-- Card Body sebagai Tab Content Pane -->
                             <div class="card-body p-4">
-
                                 <!-- Pane 1: Identitas Diri -->
                                 @if ($activeTab === 'diri')
-                                    <div wire:transition>
+                                    <div wire:key="tab-diri">
                                         <div class="row">
                                             <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled label="Nama"
                                                     value="{{ $pegawai->nama }}" /></div>
@@ -122,29 +136,108 @@ new class extends Component {
                                                     label="Tanggal Lahir" value="{{ $pegawai->tanggal_lahir }}" />
                                             </div>
                                             <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                    label="Jenis Kelamin" value="{{ $pegawai->jenis_kelamin }}" />
+                                            </div>
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
                                                     label="Unit Organisasi" value="{{ $pegawai->unit_organisasi }}" />
+                                            </div>
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                    label="Rumpun Jabatan"
+                                                    value="{{ $pegawai->rumpunJabatan->nama }}" />
+                                            </div>
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                    label="Nama Jabatan" value="{{ $pegawai->nama_jabatan }}" />
                                             </div>
                                             <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
                                                     label="Pangkat Golongan"
                                                     value="{{ $pegawai->pangkat_golongan }}" /></div>
+
                                             <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
-                                                    label="Jenis Kelamin" value="{{ $pegawai->jenis_kelamin }}" />
+                                                    label="Jenis Pensiun" value="{{ $pegawai->jenisPensiun->nama }}" />
                                             </div>
+                                            @if ($pegawai->tanggal_pensiun)
+                                                <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                        label="Tanggal Pensiun"
+                                                        value="{{ $pegawai->tanggal_pensiun->isoFormat('DD-MMMM-YYYY') }}" />
+                                                </div>
+                                            @endif
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                    label="Alamat Sekarang" value="{{ $pegawai->alamat_sekarang }}" />
+                                            </div>
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                    label="Alamat Pensiun" value="{{ $pegawai->alamat_pensiun }}" />
+                                            </div>
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                    label="Nomor Telepon" value="{{ $pegawai->telepon }}" />
+                                            </div>
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                    label="Mempunyai Pasangan"
+                                                    value="{{ $pegawai->mempunyai_pasangan ? 'Ya' : 'Tidak' }}" />
+                                            </div>
+                                            @if ($pegawai->status_pasangan)
+                                                <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                        label="Status Pasangan"
+                                                        value="{{ $pegawai->status_pasangan }}" />
+                                                </div>
+                                            @endif
+
                                         </div>
+                                    </div>
                                 @endif
 
                                 <!-- Pane 2: Identitas Pasangan -->
                                 @if ($activeTab === 'pasangan')
-                                    <div wire:transition>
-                                        <h5 class="text-secondary mb-3">Form / Informasi Identitas Pasangan</h5>
-                                        <!-- Silakan sesuaikan isi body di sini -->
-                                        <p class="text-muted">Konten untuk Identitas Pasangan...</p>
+                                    <div wire:key="tab-pasangan">
+                                        <div class="row">
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled label="Nama"
+                                                    value="{{ $pasangan->nama }}" />
+                                            </div>
+                                            @if ($pasangan->nip)
+                                                <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                        label="NIP" value="{{ $pasangan->nip }}" />
+                                                </div>
+                                            @endif
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled label="NIK"
+                                                    value="{{ $pasangan->nik }}" />
+                                            </div>
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                    label="Tanggal Lahir"
+                                                    value="{{ $pasangan->tanggal_lahir->isoFormat('DD-MM-YYYY') }}" />
+                                            </div>
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                    label="Pekerjaan" value="{{ $pasangan->pekerjaan }}" />
+                                            </div>
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                    label="Nomor Telepon" value="{{ $pasangan->telepon }}" />
+                                            </div>
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                    label="Nomor Akta" value="{{ $pasangan->nomor_akta }}" />
+                                            </div>
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                    label="Tanggak Akta"
+                                                    value="{{ $pasangan->tanggal_akta->isoFormat('DD-MM-YYYY') }}" />
+                                            </div>
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                    label="Mempunyai Anak"
+                                                    value="{{ $pasangan->mempunyai_anak ? 'Ya' : 'Tidak' }}" />
+                                            </div>
+                                            <div class="col-lg-3 mb-3">
+                                                <div class="mb-3">
+                                                    <label class="form-label">File Akta</label>
+                                                    <button type="button"
+                                                        wire:click="previewFile('dokumen-akta', '{{ $pasangan->file_akta }}', 'Dokumen Akta')"
+                                                        class="btn btn-warning text-dark fw-bold d-flex align-items-center">
+                                                        <i class="bi bi bi-eye me-1"></i> Lihat File
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 @endif
 
                                 <!-- Pane 3: Identitas Anak -->
                                 @if ($activeTab === 'anak')
-                                    <div wire:transition>
+                                    <div wire:key="tab-anak">
                                         <h5 class="text-secondary mb-3">Form / Informasi Identitas Anak</h5>
                                         <!-- Silakan sesuaikan isi body di sini -->
                                         <p class="text-muted">Konten untuk Identitas Anak...</p>
@@ -153,7 +246,7 @@ new class extends Component {
 
                                 <!-- Pane 4: Dokumen Pensiun -->
                                 @if ($activeTab === 'dokumen')
-                                    <div wire:transition>
+                                    <div wire:key="tab-dokumen">
                                         <h5 class="text-secondary mb-3">Unggah & Daftar Dokumen Pensiun</h5>
                                         <!-- Silakan sesuaikan isi body di sini -->
                                         <p class="text-muted">Konten untuk Dokumen Pensiun (maksimal 750KB format PDF,
@@ -179,4 +272,6 @@ new class extends Component {
             </div>
         </section>
     </div>
+
+
 </div>

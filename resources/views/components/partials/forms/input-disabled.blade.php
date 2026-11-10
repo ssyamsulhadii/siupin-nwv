@@ -6,7 +6,9 @@
     @endif
 
     <!-- Menggunakan atribut disabled agar nilainya TIDAK dikirim ke server oleh browser -->
-    <input type="text" class="form-control @error($name) is-invalid @enderror" value="{{ $value }}" disabled>
+    <div class="p-2 px-3 bg-light border rounded text-dark fw-medium text-break">
+        {{ $value }}
+    </div>
 
     @error($name)
         <div class="invalid-feedback">{{ $message }}</div>

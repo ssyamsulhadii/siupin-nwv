@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Models\DokumenPensiun;
 use App\Models\Pasangan;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\RumpunJabatan;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Pegawai extends Model
 {
@@ -22,6 +24,15 @@ class Pegawai extends Model
     public function dokumenPensiun(): HasOne
     {
         return $this->hasOne(DokumenPensiun::class, 'pegawai_id');
+    }
+
+    public function jenisPensiun(): BelongsTo
+    {
+        return $this->belongsTo(JenisPensiun::class, 'jenis_pensiun_id');
+    }
+    public function rumpunJabatan(): BelongsTo
+    {
+        return $this->belongsTo(RumpunJabatan::class, 'rumpun_jabatan_id');
     }
 
     protected function statusUsulText(): Attribute
