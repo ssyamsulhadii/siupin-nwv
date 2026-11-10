@@ -2,7 +2,7 @@
 
 <div class="{{ $setcol }} mb-3">
     @if ($label)
-        <label class="form-label">{{ $label }}</label>
+        <label class="form-label fw-semibold">{{ $label }}</label>
     @endif
 
     <!-- Menggunakan atribut disabled agar nilainya TIDAK dikirim ke server oleh browser -->

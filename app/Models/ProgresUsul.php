@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class ProgresUsul extends Model
 {
     protected $table = "progres_usul";
-    protected $fillable = ['warna', 'catatan'];
+    protected $fillable = ['warna', 'keterangan', 'kategori_status_usul'];
 }

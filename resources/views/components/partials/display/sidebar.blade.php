@@ -31,13 +31,6 @@
 
                 @auth
                     @if (Auth::user()->level == 'admin')
-                        <!-- Menu Data Statistik -->
-                        <a class="nav-link {{ request()->routeIs('data-statistik') ? 'active' : '' }}"
-                            href="{{ route('data-statistik') }}">
-                            <span class="nav-icon"><i class="bi bi-clipboard-data" aria-hidden="true"></i></span>
-                            <span class="nav-text">Data Statistik</span>
-                        </a>
-
                         <!-- Menu Data Pemohon -->
                         <a class="nav-link {{ request()->routeIs('data-pemohon') ? 'active' : '' }}"
                             href="{{ route('data-pemohon') }}">
@@ -64,6 +57,13 @@
                             href="{{ route('manajemen-user') }}">
                             <span class="nav-icon"><i class="bi bi-person-gear" aria-hidden="true"></i></span>
                             <span class="nav-text">Manajemen User</span>
+                        </a>
+
+                        <!-- Menu Progres Usul -->
+                        <a class="nav-link {{ request()->routeIs('progres-usul') ? 'active' : '' }}"
+                            href="{{ route('progres-usul') }}">
+                            <span class="nav-icon"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span>
+                            <span class="nav-text">Progres Usul</span>
                         </a>
 
                         <!-- Menu Manajemen User -->

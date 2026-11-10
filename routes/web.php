@@ -9,16 +9,18 @@ Route::livewire('/daftar', 'pages::account.register')->name('register')->middlew
 
 
 Route::middleware(['auth', 'level:admin'])->group(function () {
-    Route::livewire('/rumpun-jabatan', 'pages::rumpun-jabatan')->name('rumpun-jabatan');
-    Route::livewire('/jenis-pensiun', 'pages::jenis-pensiun')->name('jenis-pensiun');
-    Route::livewire('/manajemen-user', 'pages::manajemen-user')->name('manajemen-user');
-
     Route::livewire('/data-pemohon', 'pages::data-pemohon')->name('data-pemohon');
-    Route::livewire('/data-statistik', 'pages::data-statistik')->name('data-statistik');
+    Route::livewire('/jenis-pensiun', 'pages::jenis-pensiun')->name('jenis-pensiun');
+    Route::livewire('/rumpun-jabatan', 'pages::rumpun-jabatan')->name('rumpun-jabatan');
+    Route::livewire('/manajemen-user', 'pages::manajemen-user')->name('manajemen-user');
+    Route::livewire('/progres-usul', 'pages::progres-usul')->name('progres-usul');
     Route::livewire('/dokumen-pendukung', 'pages::dokumen-pendukung')->name('dokumen-pendukung');
 });
-Route::livewire('/usul-pensiun/create', 'pages::usul-pensiun.create')->name('usul-pensiun.create');
-Route::livewire('/usul-pensiun/{pegawai}/detail-usulan', 'pages::usul-pensiun.detail-usulan')->name('usul-pensiun.detail_usulan');
+
+Route::middleware(['auth', 'level:member'])->group(function () {
+    Route::livewire('/usul-pensiun/create', 'pages::usul-pensiun.create')->name('usul-pensiun.create');
+    Route::livewire('/usul-pensiun/{pegawai}/detail-usulan', 'pages::usul-pensiun.detail-usulan')->name('usul-pensiun.detail_usulan');
+});
 
 
 

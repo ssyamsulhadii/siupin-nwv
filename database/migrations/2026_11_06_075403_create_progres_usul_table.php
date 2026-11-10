@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('warna');
             $table->text('keterangan');
+            $table->string('kategori_status_usul'); //1.Draft, 2.Terkirim, 3.Perbaikan, 4.Diterima
             $table->timestamps();
         });
     }

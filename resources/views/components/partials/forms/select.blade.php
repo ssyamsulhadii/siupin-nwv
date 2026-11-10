@@ -10,7 +10,7 @@
 
 <div class="{{ $setcol }}">
     @if ($label)
-        <label class="form-label" for="{{ $name }}">{!! $label !!}</label>
+        <label class="form-label fw-semibold" for="{{ $name }}">{!! $label !!}</label>
     @endif
 
     <select name="{{ $name }}" id="{{ $name }}" class="form-select @error($name) is-invalid @enderror"

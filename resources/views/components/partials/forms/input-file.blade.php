@@ -12,7 +12,7 @@
 ])
 
 <div class="col-12">
-    <label class="form-label" for="{{ $attributes->get('id', md5($name)) }}">
+    <label class="form-label fw-semibold" for="{{ $attributes->get('id', md5($name)) }}">
         {{ $label }}
         @if ($maxSize || $formatDesc)
             <span
