@@ -36,8 +36,8 @@
             <!-- KONDISI 2: Sudah ada file di DB -> Tombol Preview -->
             <button type="button"
                 wire:click="previewFile('{{ $folder }}', '{{ $pegawai->dokumenPensiun->{$field} }}', '{{ $label }}')"
-                class="btn btn-warning text-white text-nowrap">
-                <i class="bi bi-eye me-1"></i> Preview
+                class="btn btn-warning text-dark text-nowrap">
+                <i class="bi bi-eye me-1"></i> Lihat File
             </button>
         @else
             <!-- KONDISI 3: Belum ada file -->

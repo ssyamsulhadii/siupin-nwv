@@ -17,6 +17,8 @@ new class extends Component {
         $pegawai = Pegawai::firstWhere('nip', $pegawai);
         $this->pegawai = $pegawai;
         $this->pasangan = $pegawai?->pasangan;
+        $this->list_anak = $this->pegawai->pasangan->anak;
+        $this->dokumen_pensiun = $pegawai->dokumenPensiun;
     }
 
     public function previewFile($folder, $fileName, $titleDokumen)
@@ -32,7 +34,7 @@ new class extends Component {
     <x-partials.display.preview-file-modal id="previewModalDokumen" title="{{ $titleDokumen }}"
         path="{{ $pathFileAkses }}" />
     <div class="container-fluid px-3 px-lg-4 py-4">
-        <x-partials.display.page-title title="Detail Pensiun"></x-partials.display.page-title>
+        <x-partials.display.page-title title="Detail Usulan"></x-partials.display.page-title>
         <section class="row g-3">
             <div class="col-12">
                 <section class="panel">
@@ -41,7 +43,7 @@ new class extends Component {
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
                             <h2 class="h4 mb-0 fw-bold text-dark d-flex align-items-center gap-2">
                                 <i class="bi bi-table text-primary fs-3" aria-hidden="true"></i>
-                                <span>Tampil Data Usulan Pensiun</span>
+                                <span>Form Informasi Usulan</span>
                             </h2>
                             <!-- Status Usul (Tampil jika bukan 0) dengan ukuran besar dan tegas -->
                             @if ($pegawai->status_usul != 0)
@@ -115,6 +117,14 @@ new class extends Component {
                                             <i class="bi bi-file-earmark-arrow-up me-1"></i> Dokumen Pensiun
                                         </button>
                                     </li>
+                                    <!-- Tab 5: Pertek & SK Pensiun -->
+                                    <li class="nav-item" role="presentation">
+                                        <button type="button"
+                                            class="nav-link {{ $activeTab === 'pertek_sk' ? 'active fw-bold' : '' }}"
+                                            wire:click="$set('activeTab', 'pertek_sk')">
+                                            <i class="bi bi-file-earmark-check me-1"></i> Pertek & SK Pensiun
+                                        </button>
+                                    </li>
                                 </ul>
                             </div>
 
@@ -186,72 +196,214 @@ new class extends Component {
                                 @endif
 
                                 <!-- Pane 2: Identitas Pasangan -->
-                                @if ($activeTab === 'pasangan')
-                                    <div wire:key="tab-pasangan">
-                                        <div class="row">
-                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled label="Nama"
-                                                    value="{{ $pasangan->nama }}" />
-                                            </div>
-                                            @if ($pasangan->nip)
+                                @if ($pegawai->mempunyai_pasangan)
+                                    @if ($activeTab === 'pasangan')
+                                        <div wire:key="tab-pasangan">
+                                            <div class="row">
                                                 <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
-                                                        label="NIP" value="{{ $pasangan->nip }}" />
+                                                        label="Nama" value="{{ $pasangan->nama }}" />
                                                 </div>
-                                            @endif
-                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled label="NIK"
-                                                    value="{{ $pasangan->nik }}" />
-                                            </div>
-                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
-                                                    label="Tanggal Lahir"
-                                                    value="{{ $pasangan->tanggal_lahir->isoFormat('DD-MM-YYYY') }}" />
-                                            </div>
-                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
-                                                    label="Pekerjaan" value="{{ $pasangan->pekerjaan }}" />
-                                            </div>
-                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
-                                                    label="Nomor Telepon" value="{{ $pasangan->telepon }}" />
-                                            </div>
-                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
-                                                    label="Nomor Akta" value="{{ $pasangan->nomor_akta }}" />
-                                            </div>
-                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
-                                                    label="Tanggak Akta"
-                                                    value="{{ $pasangan->tanggal_akta->isoFormat('DD-MM-YYYY') }}" />
-                                            </div>
-                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
-                                                    label="Mempunyai Anak"
-                                                    value="{{ $pasangan->mempunyai_anak ? 'Ya' : 'Tidak' }}" />
-                                            </div>
-                                            <div class="col-lg-3 mb-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label">File Akta</label>
-                                                    <button type="button"
-                                                        wire:click="previewFile('dokumen-akta', '{{ $pasangan->file_akta }}', 'Dokumen Akta')"
-                                                        class="btn btn-warning text-dark fw-bold d-flex align-items-center">
-                                                        <i class="bi bi bi-eye me-1"></i> Lihat File
-                                                    </button>
+                                                @if ($pasangan->nip)
+                                                    <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                            label="NIP" value="{{ $pasangan->nip }}" />
+                                                    </div>
+                                                @endif
+                                                <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                        label="NIK" value="{{ $pasangan->nik }}" />
+                                                </div>
+                                                <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                        label="Tanggal Lahir"
+                                                        value="{{ $pasangan->tanggal_lahir->isoFormat('DD-MM-YYYY') }}" />
+                                                </div>
+                                                <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                        label="Pekerjaan" value="{{ $pasangan->pekerjaan }}" />
+                                                </div>
+                                                <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                        label="Nomor Telepon" value="{{ $pasangan->telepon }}" />
+                                                </div>
+                                                <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                        label="Nomor Akta" value="{{ $pasangan->nomor_akta }}" />
+                                                </div>
+                                                <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                        label="Tanggak Akta"
+                                                        value="{{ $pasangan->tanggal_akta->isoFormat('DD-MM-YYYY') }}" />
+                                                </div>
+                                                <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                        label="Mempunyai Anak"
+                                                        value="{{ $pasangan->mempunyai_anak ? 'Ya' : 'Tidak' }}" />
+                                                </div>
+                                                <div class="col-lg-3 mb-3">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">File Akta</label>
+                                                        <button type="button"
+                                                            wire:click="previewFile('dokumen-akta', '{{ $pasangan->file_akta }}', 'Dokumen Akta')"
+                                                            class="btn btn-warning text-dark fw-bold d-flex align-items-center">
+                                                            <i class="bi bi bi-eye me-1"></i> Lihat File
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endif
                                 @endif
 
                                 <!-- Pane 3: Identitas Anak -->
-                                @if ($activeTab === 'anak')
-                                    <div wire:key="tab-anak">
-                                        <h5 class="text-secondary mb-3">Form / Informasi Identitas Anak</h5>
-                                        <!-- Silakan sesuaikan isi body di sini -->
-                                        <p class="text-muted">Konten untuk Identitas Anak...</p>
-                                    </div>
+                                @if (optional($pegawai->pasangan)->mempunyai_anak)
+                                    @if ($activeTab === 'anak')
+                                        <div wire:key="tab-anak">
+                                            <div class="row">
+                                                <div class="table-responsive mt-4">
+                                                    <table class="table table-bordered align-middle mb-0"
+                                                        id="ordersTable" data-searchable-table="">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center">No</th>
+                                                                <th>Nama-NIK</th>
+                                                                <th class="text-center">Tanggal Lahir</th>
+                                                                <th class="text-center">Jenis Kelamin</th>
+                                                                <th class="text-center">Telepon</th>
+                                                                <th>Informasi Akta</th>
+                                                                <th class="text-center">File Akta</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @forelse ($list_anak as $anak)
+                                                                <tr>
+                                                                    <td class="text-center fw-semibold"
+                                                                        style="min-width: 40px;">
+                                                                        {{ $loop->iteration }}
+                                                                    </td>
+                                                                    <td>{{ $anak->nama }} <br> {{ $anak->nik }}
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        {{ $anak->tanggal_lahir->isoFormat('DD-MM-YYYY') }}
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        {{ $anak->jenis_kelamin == 'L' ? 'Laki Laki' : 'Perempuan' }}
+                                                                    </td>
+                                                                    <td class="text-center">{{ $anak->telepon }}</td>
+                                                                    <td>Nomor : {{ $anak->nomor_akta }} <br>
+                                                                        Tanggal :
+                                                                        {{ $anak->tanggal_akta->isoFormat('DD-MMMM-YYYY') }}
+                                                                        <br>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <button type="button"
+                                                                            wire:click="previewFile('akta-kelahiran', '{{ $anak->file_akta }}', 'Akta Kelahiran')"
+                                                                            class="btn btn-warning text-dark fw-bold">
+                                                                            <i class="bi bi bi-eye me-1"></i> Lihat
+                                                                            File
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                            @empty
+                                                                <tr>
+                                                                    <td colspan="6">
+                                                                        <h5 class="text-danger text-center">Data
+                                                                            identitas
+                                                                            anak belum diinput</h5>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforelse
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 @endif
 
                                 <!-- Pane 4: Dokumen Pensiun -->
                                 @if ($activeTab === 'dokumen')
                                     <div wire:key="tab-dokumen">
-                                        <h5 class="text-secondary mb-3">Unggah & Daftar Dokumen Pensiun</h5>
-                                        <!-- Silakan sesuaikan isi body di sini -->
-                                        <p class="text-muted">Konten untuk Dokumen Pensiun (maksimal 750KB format PDF,
-                                            dll)...
-                                        </p>
+                                        <div class="row">
+                                            @php
+                                                $dokumens = [
+                                                    'supeng_instansi' => 'Surat Pengantar Instansi',
+                                                    'super_pemohon' => 'Surat Pernyataan Pemohon',
+                                                    'super_disiplin' => 'Surat Pernyataan Hukuman Disiplin',
+                                                    'super_pidana' => 'Surat Pernyataan Tidak Dipidana',
+                                                    'sk_cpns' => 'SK CPNS',
+                                                    'sk_pns' => 'SK PNS',
+                                                    'sk_pangkat_akhir' => 'SK Pangkat Terakhir',
+                                                    'skp_tahunan' => 'SKP Tahunan Terakhir',
+                                                    'foto_ktp' => 'Foto KTP',
+                                                    'foto_kk' => 'Foto Kartu Keluarga (KK)',
+                                                    'pas_foto' => 'Pas Foto Terbaru',
+                                                ];
+                                            @endphp
+                                            @foreach ($dokumens as $field => $label)
+                                                <div class="col-lg-3 col-md-6 mb-3">
+                                                    <div class="p-3 border rounded bg-light shadow-sm">
+                                                        <label
+                                                            class="form-label fw-bold mb-2">{{ $label }}</label>
+                                                        <div>
+                                                            <button type="button"
+                                                                wire:click="previewFile('{{ str_replace('_', '-', $field) }}', '{{ $dokumen_pensiun->{$field} }}', '{{ $label }}')"
+                                                                class="btn btn-warning text-dark fw-bold btn-sm d-inline-flex align-items-center">
+                                                                <i class="bi bi-eye me-1"></i> Lihat File
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                            @if ($dokumen_pensiun->sk_pmk)
+                                                <div class="col-lg-3 col-md-6 mb-3">
+                                                    <div class="p-3 border rounded bg-light shadow-sm">
+                                                        <label class="form-label fw-bold mb-2">SK PMK</label>
+                                                        <div>
+                                                            <button type="button"
+                                                                wire:click="previewFile('sk-pmk', '{{ $dokumen_pensiun->sk_pmk }}', 'SK PMK')"
+                                                                class="btn btn-warning text-dark fw-bold d-inline-flex align-items-center">
+                                                                <i class="bi bi-eye me-1"></i> Lihat File
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <!-- Pane 5: Pertek & SK Pensiun -->
+                                @if ($activeTab === 'pertek_sk')
+                                    <div wire:key="tab-pertek-sk">
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-6 mb-3">
+                                                <div class="p-3 border rounded bg-light shadow-sm">
+                                                    <label class="form-label fw-bold mb-2">Pertek Pensiun</label>
+                                                    <div>
+                                                        @if ($dokumen_pensiun->pertek_pensiun)
+                                                            <button type="button"
+                                                                wire:click="previewFile('pertek-pensiun', '{{ $dokumen_pensiun->pertek_pensiun }}', 'Pertek Pensiun')"
+                                                                class="btn btn-warning text-dark fw-bold d-inline-flex align-items-center">
+                                                                <i class="bi bi-eye me-1"></i> Lihat File
+                                                            </button>
+                                                        @else
+                                                            <div class="badge bg-danger">Pertek Pensiun Belum Tersedia
+                                                                . . .</div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6 mb-3">
+                                                <div class="p-3 border rounded bg-light shadow-sm">
+                                                    <label class="form-label fw-bold mb-2">SK Pensiun</label>
+                                                    <div>
+                                                        @if ($dokumen_pensiun->sk_pensiun)
+                                                            <button type="button"
+                                                                wire:click="previewFile('sk-pensiun', '{{ $dokumen_pensiun->sk_pensiun }}', 'SK Pensiun')"
+                                                                class="btn btn-warning text-dark fw-bold d-inline-flex align-items-center">
+                                                                <i class="bi bi-eye me-1"></i> Lihat File
+                                                            </button>
+                                                        @else
+                                                            <div class="badge bg-danger">SK Pensiun Belum Tersedia . .
+                                                                .</div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 @endif
 

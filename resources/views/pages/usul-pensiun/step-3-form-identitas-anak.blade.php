@@ -57,7 +57,8 @@
             &larr; Sebelumnya
         </button>
         <button type="button" wire:click="addIdentitasAnak" class="btn btn-primary me-2">
-            <i class="bi bi-plus-circle"></i> {{ $anak_id ? 'Ubah' : 'Tambah' }} Datah Anak
+            <i class="bi {{ $anak_id ? 'bi-pencil-square' : 'bi-plus-circle' }}"></i> {{ $anak_id ? 'Ubah' : 'Tambah' }}
+            Data Anak
         </button>
         @if (count($this->list_anak) > 0)
             <button type="button" wire:click="nextStepUploadDokumen" class="btn btn-warning">
@@ -84,7 +85,7 @@
                     <tr>
                         <td class="text-center fw-semibold" style="min-width: 40px;">{{ $loop->iteration }}</td>
                         <td>{{ $anak->nama }} <br> {{ $anak->nik }}</td>
-                        <td class="text-center">{{ $anak->tanggal_lahir->isoFormat('DD-MM-YYYY') }}</td>
+                        <td class="text-center">{{ $anak->tanggal_lahir->isoFormat('DD-MMMM-YYYY') }}</td>
                         <td class="text-center">{{ $anak->jenis_kelamin == 'L' ? 'Laki Laki' : 'Perempuan' }}</td>
                         <td class="text-center">{{ $anak->telepon }}</td>
                         <td>Nomor : {{ $anak->nomor_akta }} <br>
@@ -94,10 +95,8 @@
                             <div class="d-flex align-items-center justify-content-center gap-1" role="group"
                                 aria-label="Aksi Jenis Pensiun">
                                 <!-- Lihat File -->
-                                <a href="{{ asset('storage/dokumen-pensiun/akta-kelahiran/' . $anak->file_akta) }}"
-                                    target="_blank">
-                                    <x-partials.forms.action-button icon="bi-eye" label="Lihat" color="primary" />
-                                </a>
+                                <x-partials.forms.action-button icon="bi-eye" label="Lihat" color="primary"
+                                    wireClick="previewFile('akta-kelahiran', '{{ $anak->file_akta }}', 'Akta Kelahiran')" />
                                 <!-- Tombol Ubah / Edit -->
                                 <x-partials.forms.action-button icon="bi-pencil" label="Ubah" color="warning"
                                     wireClick="editIdentitasAnak({{ $anak->id }})" />
