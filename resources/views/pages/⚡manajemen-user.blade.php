@@ -51,6 +51,13 @@ new class extends Component {
         $this->resetForm();
     }
 
+    public function delete(User $user)
+    {
+        $user->delete();
+        $this->resetForm();
+        session()->flash('message', 'Data User berhasil dihapus!');
+    }
+
     public function resetForm()
     {
         $this->reset(['form', 'password', 'password_confirmation', 'user_id']);
@@ -61,14 +68,14 @@ new class extends Component {
 
 <div>
     <div class="container-fluid px-3 px-lg-4 py-4">
-        <x-partials.display.page-title title="Jabatan Nominatif"></x-partials.display.page-title>
+        <x-partials.display.page-title title="Manajemen User"></x-partials.display.page-title>
         <section class="row g-3">
             {{-- Tabel Data --}}
             <div class="col-12 col-xl-7">
                 <section class="panel">
                     <div class="panel-header">
                         <h2 class="h5 mb-1 section-title"><i class="bi bi-table" aria-hidden="true"></i>
-                            <span>Daftar Jabatan Nominatif</span>
+                            <span>Daftar User Pensiun</span>
                         </h2>
                         <x-partials.forms.input-search />
                     </div>
@@ -97,9 +104,11 @@ new class extends Component {
                                             <div class="d-flex align-items-center justify-content-center gap-1"
                                                 role="group" aria-label="Aksi Jenis Pensiun">
                                                 <!-- Tombol Ubah / Edit -->
-                                                <x-partials.forms.action-button icon="bi-arrow-repeat"
-                                                    label="Reset Password" color="info"
-                                                    wireClick="edit({{ $user->id }})" />
+                                                <x-partials.forms.action-button icon="bi-arrow-repeat" label="Password"
+                                                    color="info" wireClick="edit({{ $user->id }})" />
+                                                <!-- Tombol Hapus -->
+                                                <x-partials.forms.action-button icon="bi-trash" label="Hapus"
+                                                    color="danger" wireClick="delete({{ $user->id }})" />
                                             </div>
                                         </td>
                                     </tr>
