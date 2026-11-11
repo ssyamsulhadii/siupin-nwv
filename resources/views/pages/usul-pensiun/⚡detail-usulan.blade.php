@@ -6,7 +6,7 @@ use Livewire\Component;
 new class extends Component {
     public $activeTab = 'diri'; // Default tab yang dibuka pertama kali
     public $pegawai;
-    public $pasangan;
+    public $pasangan = null;
     public $list_anak = null;
     public $dokumen_pensiun = null;
     public $pathFileAkses = null;
@@ -14,11 +14,20 @@ new class extends Component {
 
     public function mount($pegawai)
     {
-        $pegawai = Pegawai::firstWhere('nip', $pegawai);
-        $this->pegawai = $pegawai;
-        $this->pasangan = $pegawai?->pasangan;
-        $this->list_anak = $this->pegawai->pasangan->anak;
-        $this->dokumen_pensiun = $pegawai->dokumenPensiun;
+        $pegawai = Pegawai::where('nip', $pegawai)->firstOrFail();
+        if ($pegawai) {
+            $this->pegawai = $pegawai;
+            if ($pegawai->pasangan) {
+                $this->pasangan = $pegawai->pasangan;
+                if ($this->pegawai->pasangan->anak) {
+                    $this->list_anak = $this->pegawai->pasangan->anak;
+                }
+            }
+            $this->dokumen_pensiun = $pegawai->dokumenPensiun;
+        } else {
+            session()->flash('warning', 'Data usul pensiun belum diinput!');
+            return to_route('beranda');
+        }
     }
 
     public function previewFile($folder, $fileName, $titleDokumen)

@@ -18,6 +18,7 @@ new class extends Component {
         <div class="row g-3">
             <!-- Kolom Kiri: Tentang Aplikasi & Quote -->
             <div class="col-lg-4">
+                <x-partials.feedback.alert />
                 <!-- Card Tentang Aplikasi -->
                 <div class="card border-0 shadow-sm mb-3">
                     <div class="card-body p-3 p-md-4">
