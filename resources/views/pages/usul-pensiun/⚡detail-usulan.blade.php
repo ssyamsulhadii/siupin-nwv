@@ -181,13 +181,13 @@ new class extends Component {
                                                 </div>
                                             @endif
                                             <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
+                                                    label="Nomor Telepon" value="{{ $pegawai->telepon }}" />
+                                            </div>
+                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
                                                     label="Alamat Sekarang" value="{{ $pegawai->alamat_sekarang }}" />
                                             </div>
                                             <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
                                                     label="Alamat Pensiun" value="{{ $pegawai->alamat_pensiun }}" />
-                                            </div>
-                                            <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
-                                                    label="Nomor Telepon" value="{{ $pegawai->telepon }}" />
                                             </div>
                                             <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
                                                     label="Mempunyai Pasangan"
