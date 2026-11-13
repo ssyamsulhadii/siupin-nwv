@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-
 Route::livewire('/', 'pages::beranda')->name('beranda');
 Route::livewire('/masuk', 'pages::account.login')->name('login')->middleware('guest');
 Route::livewire('/daftar', 'pages::account.register')->name('register')->middleware('guest');
@@ -22,7 +21,22 @@ Route::middleware(['auth', 'level:member'])->group(function () {
     Route::livewire('/usul-pensiun/{pegawai}/detail-usulan', 'pages::usul-pensiun.detail-usulan')->name('usul-pensiun.detail_usulan');
 });
 
+Route::get('test', function () {
+    //  1. Ambil semua data user (hanya kolom id dan username/nip untuk efisiensi)
+    $users = \App\Models\User::select('id', 'username')->get();
+    $updatedCount = 0;
+    // 2. Lakukan perulangan untuk setiap user
+    foreach ($users as $user) {
+        // 3. Cari data pegawai yang kolom nip-nya sama dengan username user, lalu update user_id-nya
+        $affected = \App\Models\Pegawai::where('nip', $user->username)
+            ->update(['user_id' => $user->id]);
 
+        if ($affected > 0) {
+            $updatedCount += $affected;
+        }
+    }
+    return "Berhasil memperbarui $updatedCount data pegawai!";
+});
 
 
 Route::post('/keluar', function () {
