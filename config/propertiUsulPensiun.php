@@ -23,6 +23,8 @@ return [
         'nomor_akta' => '',
         'tanggal_akta' => '',
         'file_akta' => '',
+        'suket_kematian' => '',
+        'suket_janda_duda' => '',
         'mempunyai_anak' => '',
         'pegawai_id' => '',
     ],
@@ -79,6 +81,8 @@ return [
         'form_identitas_pasangan.nomor_akta' => 'Nomor Akta Nikah',
         'form_identitas_pasangan.tanggal_akta' => 'Tanggal Akta Nikah',
         'form_identitas_pasangan.file_akta' => 'File Akta Nikah',
+        'form_identitas_pasangan.suket_kematian' => 'Surat Keterangan Kematian',
+        'form_identitas_pasangan.suket_janda_duda' => 'Surat Keterangan Janda Duda',
         'form_identitas_pasangan.mempunyai_anak' => 'Status Mempunyai Anak',
         'form_identitas_pasangan.pegawai_id' => 'ID Pegawai',
 
@@ -92,7 +96,7 @@ return [
         'form_identitas_anak.tanggal_akta' => 'Tanggal Akta Kelahiran Anak',
         'form_identitas_anak.file_akta' => 'File Akta Kelahiran Anak',
         'form_identitas_anak.pasangan_id' => 'ID Pasangan',
-        
+
         // --- Upload Dokumen ---
         'upload_dokumen.supeng_instansi' => 'Supeng Instansi',
         'upload_dokumen.super_pemohon' => 'Surat Permohonan Pensiun', // atau disesuaikan jika singkatan lain
@@ -108,6 +112,6 @@ return [
         'upload_dokumen.pas_foto' => 'Pas Foto',
         'upload_dokumen.pertek_pensiun' => 'Pertek Pensiun (Pertimbangan Teknis BKN)',
         'upload_dokumen.sk_pensiun' => 'SK Pensiun',
-        
+
     ],
 ];

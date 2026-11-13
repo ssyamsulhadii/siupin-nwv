@@ -16,11 +16,11 @@
                     disabled></x-partials.forms.input>
             </div>
             <div class="col-lg-3 mb-3">
-                <x-partials.forms.input name="data_mapping.nkk" label="NKK" wire:model="data_mapping.nkk"
+                <x-partials.forms.input name="data_mapping.nik" label="NIK" wire:model="data_mapping.nik"
                     disabled></x-partials.forms.input>
             </div>
             <div class="col-lg-3 mb-3">
-                <x-partials.forms.input name="data_mapping.nik" label="NIK" wire:model="data_mapping.nik"
+                <x-partials.forms.input name="data_mapping.nkk" label="NKK" wire:model="data_mapping.nkk"
                     disabled></x-partials.forms.input>
             </div>
         </div>

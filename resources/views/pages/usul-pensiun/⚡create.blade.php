@@ -124,7 +124,19 @@ new class extends Component {
     public function saveIdentitasPasangan()
     {
         $this->form_identitas_pasangan['pegawai_id'] = $this->pegawai->id;
-        $rule = $this->pegawai->pasangan ? 'sometimes' : 'required';
+
+        $hasPasangan = $this->pegawai->pasangan;
+        $isPensiunJandaDuda = $this->pegawai->jenis_pensiun_id == 3;
+
+        // Aturan validasi dinamis untuk file akta
+        $ruleAkta = $hasPasangan ? 'sometimes' : 'required';
+
+        // Aturan validasi dinamis untuk suket kematian & suket janda/duda
+        // Wajib diisi jika jenis_pensiun_id == 3 dan belum ada file sebelumnya di database
+        $ruleSuketKematian = $isPensiunJandaDuda ? ($hasPasangan && $hasPasangan->suket_kematian ? 'sometimes|file|mimes:pdf|max:750' : 'required|file|mimes:pdf|max:750') : 'nullable|file|mimes:pdf|max:750';
+
+        $ruleSuketJandaDuda = $isPensiunJandaDuda ? ($hasPasangan && $hasPasangan->suket_janda_duda ? 'sometimes|file|mimes:pdf|max:750' : 'required|file|mimes:pdf|max:750') : 'nullable|file|mimes:pdf|max:750';
+
         $validated = $this->validate([
             'form_identitas_pasangan.nama' => 'required|string',
             'form_identitas_pasangan.nip' => 'nullable|numeric|digits:18',
@@ -134,21 +146,52 @@ new class extends Component {
             'form_identitas_pasangan.pekerjaan' => 'required|string',
             'form_identitas_pasangan.nomor_akta' => 'required|string',
             'form_identitas_pasangan.tanggal_akta' => 'required|date',
-            'form_identitas_pasangan.file_akta' => $rule . '|file|mimes:pdf|max:750',
             'form_identitas_pasangan.mempunyai_anak' => 'required|in:1,0',
             'form_identitas_pasangan.pegawai_id' => 'required|exists:pegawai,id',
+            'form_identitas_pasangan.file_akta' => $ruleAkta . '|file|mimes:pdf|max:750',
+            'form_identitas_pasangan.suket_kematian' => $ruleSuketKematian,
+            'form_identitas_pasangan.suket_janda_duda' => $ruleSuketJandaDuda,
         ]);
+
+        // 1. Handle File Akta
         if (isset($this->form_identitas_pasangan['file_akta']) && is_object($this->form_identitas_pasangan['file_akta'])) {
-            if ($this->pegawai->pasangan) {
-                Storage::disk('public')->delete('dokumen-pensiun/dokumen-akta/' . $this->pegawai->pasangan->file_akta);
+            if ($hasPasangan && $hasPasangan->file_akta) {
+                Storage::disk('public')->delete('dokumen-pensiun/dokumen-akta/' . $hasPasangan->file_akta);
             }
             $file = $this->form_identitas_pasangan['file_akta'];
             $fileName = $file->hashName();
             $file->storeAs('dokumen-pensiun/dokumen-akta', $fileName, 'public');
             $validated['form_identitas_pasangan']['file_akta'] = $fileName;
         }
+
+        // 2. Handle Suket Kematian
+        if (isset($this->form_identitas_pasangan['suket_kematian']) && is_object($this->form_identitas_pasangan['suket_kematian'])) {
+            if ($hasPasangan && $hasPasangan->suket_kematian) {
+                Storage::disk('public')->delete('dokumen-pensiun/suket-kematian/' . $hasPasangan->suket_kematian);
+            }
+            $file = $this->form_identitas_pasangan['suket_kematian'];
+            $fileName = $file->hashName();
+            $file->storeAs('dokumen-pensiun/suket-kematian', $fileName, 'public');
+            $validated['form_identitas_pasangan']['suket_kematian'] = $fileName;
+        }
+
+        // 3. Handle Suket Janda Duda
+        if (isset($this->form_identitas_pasangan['suket_janda_duda']) && is_object($this->form_identitas_pasangan['suket_janda_duda'])) {
+            if ($hasPasangan && $hasPasangan->suket_janda_duda) {
+                Storage::disk('public')->delete('dokumen-pensiun/suket-janda-duda/' . $hasPasangan->suket_janda_duda);
+            }
+            $file = $this->form_identitas_pasangan['suket_janda_duda'];
+            $fileName = $file->hashName();
+            $file->storeAs('dokumen-pensiun/suket-janda-duda', $fileName, 'public');
+            $validated['form_identitas_pasangan']['suket_janda_duda'] = $fileName;
+        }
+
+        // Simpan ke database
         $pasangan = Pasangan::updateOrCreate(['pegawai_id' => $this->pegawai->id], $validated['form_identitas_pasangan']);
+
         $this->pasangan = $pasangan;
+
+        // Alur navigasi step berikutnya
         if ($pasangan->mempunyai_anak) {
             $this->reset(['form_identitas_anak', 'anak_id']);
             $this->step = 3;
@@ -172,6 +215,7 @@ new class extends Component {
             'form_identitas_anak.tanggal_akta' => 'required|date',
             'form_identitas_anak.file_akta' => $rule . '|file|mimes:pdf|max:750',
             'form_identitas_anak.pasangan_id' => 'required|exists:pasangan,id',
+            'form_identitas_anak.keterangan' => 'required|string',
         ]);
         if (isset($this->form_identitas_anak['file_akta']) && is_object($this->form_identitas_anak['file_akta'])) {
             if ($this->anak_id) {
@@ -201,6 +245,7 @@ new class extends Component {
             'tanggal_akta' => $anak->tanggal_akta->isoFormat('YYYY-MM-DD'),
             // 'file_akta' => $anak->file_akta,
             'pasangan_id' => $anak->id,
+            'keterangan' => $anak->keterangan,
         ];
     }
 
@@ -210,7 +255,7 @@ new class extends Component {
         $anak->delete();
         $this->list_anak = Anak::all();
         session()->flash('message', 'Data identitas anak berhasil dihapus!');
-        $this->reset(['form_identitas_anak']);
+        $this->reset(['form_identitas_anak', 'anak_id']);
     }
 
     //berada pada view step-3-form-identitas-anak untuk next step upload dokumen

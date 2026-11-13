@@ -24,6 +24,16 @@
                 <x-partials.forms.input name="data_mapping.nik" label="NIK" wire:model="data_mapping.nik"
                     disabled></x-partials.forms.input>
             </div>
+            <div class="col-12">
+                <div class="alert alert-info d-flex align-items-center" role="alert">
+                    <i class="bi bi-info-circle-fill flex-shrink-0 me-2" style="font-size: 1.2rem;"></i>
+                    <div>
+                        Jika Jenis Pensiun yang dipilih adalah <strong>Atas Permintaan Sendiri (APS)</strong> atau
+                        <strong>Pensiun Dini</strong>, maka
+                        <strong>Surat Pernyataan pensiun ybs digabung dengan surat permohonan pensiun.</strong>
+                    </div>
+                </div>
+            </div>
         </div>
         {{-- Data Diri Input --}}
         <div class="row">

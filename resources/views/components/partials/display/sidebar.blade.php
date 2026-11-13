@@ -63,7 +63,7 @@
                         <a class="nav-link {{ request()->routeIs('progres-usul') ? 'active' : '' }}"
                             href="{{ route('progres-usul') }}">
                             <span class="nav-icon"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span>
-                            <span class="nav-text">Progres Usul</span>
+                            <span class="nav-text">Kategori Progres Usul</span>
                         </a>
 
                         <!-- Menu Manajemen User -->

@@ -16,11 +16,11 @@
                     disabled></x-partials.forms.input>
             </div>
             <div class="col-lg-3 mb-3">
-                <x-partials.forms.input name="data_mapping.nkk" label="NKK" wire:model="data_mapping.nkk"
+                <x-partials.forms.input name="data_mapping.nik" label="NIK" wire:model="data_mapping.nik"
                     disabled></x-partials.forms.input>
             </div>
             <div class="col-lg-3 mb-3">
-                <x-partials.forms.input name="data_mapping.nik" label="NIK" wire:model="data_mapping.nik"
+                <x-partials.forms.input name="data_mapping.nkk" label="NKK" wire:model="data_mapping.nkk"
                     disabled></x-partials.forms.input>
             </div>
         </div>
@@ -48,18 +48,29 @@
                 <x-partials.forms.input setcol="mb-3" name="form_identitas_pasangan.pekerjaan" label="Pekerjaan"
                     wire:model="form_identitas_pasangan.pekerjaan"></x-partials.forms.input>
                 <x-partials.forms.input setcol="mb-3" name="form_identitas_pasangan.nomor_akta"
-                    label="Nomor Akta (Menikah/Bercerai/Meninggal)"
+                    label="Nomor Akta (Menikah/Bercerai)"
                     wire:model="form_identitas_pasangan.nomor_akta"></x-partials.forms.input>
                 <x-partials.forms.input setcol="mb-3" name="form_identitas_pasangan.tanggal_akta"
-                    label="Tanggal Akta (Menikah/Bercerai/Meninggal)" wire:model="form_identitas_pasangan.tanggal_akta"
+                    label="Tanggal Akta (Menikah/Bercerai)" wire:model="form_identitas_pasangan.tanggal_akta"
                     type="date"></x-partials.forms.input>
                 <x-partials.forms.input-file name="form_identitas_pasangan.file_akta" label="Dokumen Akta"
                     accept=".pdf" maxSize="750kb" formatDesc="pdf" icon="bi bi-eye"
                     byClick="{{ $pegawai->pasangan?->file_akta }}"
                     wireClick="previewFile('dokumen-akta', '{{ $pegawai->pasangan?->file_akta }}', 'Dokumen Akta')" />
 
-                @if ($pegawai->pasangan)
-                    <small class="text-primary mt-0">{{ $pegawai->pasangan->file_akta }}</small>
+                @if ($pegawai->jenis_pensiun_id == 3)
+                    {{-- Suket kematian --}}
+                    <div class="my-3">
+                        <x-partials.forms.input-file name="form_identitas_pasangan.suket_kematian"
+                            label="Suket Kematian" accept=".pdf" maxSize="750kb" formatDesc="pdf" icon="bi bi-eye"
+                            byClick="{{ $pegawai->pasangan?->suket_kematian }}"
+                            wireClick="previewFile('suket-kematian', '{{ $pegawai->pasangan?->suket_kematian }}', 'Suket Kematian')" />
+                    </div>
+                    {{-- Suket Janda Duda --}}
+                    <x-partials.forms.input-file name="form_identitas_pasangan.suket_janda_duda"
+                        label="Suket Janda Duda dari Kelurahan/Desa" accept=".pdf" maxSize="750kb" formatDesc="pdf"
+                        icon="bi bi-eye" byClick="{{ $pegawai->pasangan?->suket_kematian }}"
+                        wireClick="previewFile('suket-janda-duda', '{{ $pegawai->pasangan?->suket_janda_duda }}', 'Suket Janda Duda')" />
                 @endif
             </div>
         </div>

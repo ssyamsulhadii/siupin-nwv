@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\RumpunJabatan;
 use App\Models\JenisPensiun;
+use App\Models\ProgresUsul;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -17,7 +18,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
 
         User::create([
             'username' => 'admin_siupin',
@@ -94,6 +94,41 @@ class DatabaseSeeder extends Seeder
 
         foreach ($rumpun_jabatan as $item) {
             RumpunJabatan::create($item);
+        }
+
+        $list_progres_usul = [
+            [
+                'warna' => 'warning',
+                'keterangan' => 'Dokumen Masuk',
+                'kategori_status_usul' => 'Dikirim',
+            ],
+            [
+                'warna' => 'secondary',
+                'keterangan' => 'Dokumen Tarik',
+                'kategori_status_usul' => 'Diterima',
+            ],
+            [
+                'warna' => 'primary',
+                'keterangan' => 'Menunggu TTE',
+                'kategori_status_usul' => 'Diterima',
+            ],
+            [
+                'warna' => 'success',
+                'keterangan' => 'Pertek Pensiun Terbit',
+                'kategori_status_usul' => 'Diterima',
+            ],
+            [
+                'warna' => 'success',
+                'keterangan' => 'SK Pensiun Terbit',
+                'kategori_status_usul' => 'Diterima',
+            ],
+        ];
+        foreach ($list_progres_usul as $item) {
+            \App\Models\ProgresUsul::create([
+                'warna' => $item['warna'],
+                'keterangan' => $item['keterangan'],
+                'kategori_status_usul' => $item['kategori_status_usul'],
+            ]);
         }
     }
 }

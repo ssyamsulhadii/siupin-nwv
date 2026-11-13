@@ -17,11 +17,11 @@
                     disabled></x-partials.forms.input>
             </div>
             <div class="col-lg-3 mb-3">
-                <x-partials.forms.input name="data_mapping.nkk" label="NKK" wire:model="data_mapping.nkk"
+                <x-partials.forms.input name="data_mapping.nik" label="NIK" wire:model="data_mapping.nik"
                     disabled></x-partials.forms.input>
             </div>
             <div class="col-lg-3 mb-3">
-                <x-partials.forms.input name="data_mapping.nik" label="NIK" wire:model="data_mapping.nik"
+                <x-partials.forms.input name="data_mapping.nkk" label="NKK" wire:model="data_mapping.nkk"
                     disabled></x-partials.forms.input>
             </div>
         </div>
@@ -49,6 +49,8 @@
                     type="date"></x-partials.forms.input>
                 <x-partials.forms.input-file name="form_identitas_anak.file_akta" label="Dokumen Akta Kelahiran"
                     accept=".pdf" maxSize="750kb" formatDesc="pdf" />
+                <x-partials.forms.input setcol="my-3" name="form_identitas_anak.keterangan" label="Keterangan"
+                    wire:model="form_identitas_anak.keterangan" phr="Anak Kandung ...."></x-partials.forms.input>
             </div>
         </div>
     </div>
