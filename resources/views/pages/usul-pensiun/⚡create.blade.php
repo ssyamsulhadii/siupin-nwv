@@ -340,6 +340,7 @@ new class extends Component {
         }
         // 3. Jika lolos (11 dokumen wajib terisi), lanjutkan proses finalisasi
         $this->pegawai->update([
+            'progres_usul_id' => 1,
             'status_usul' => 1,
             'keterangan_usul' => 'Menunggu verifikasi admin.',
             'tanggal_usul' => now(),
