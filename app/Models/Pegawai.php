@@ -14,7 +14,7 @@ class Pegawai extends Model
 {
     protected $table = "pegawai";
     protected $guarded = [];
-    public $casts = ['tanggal_pensiun' => 'date'];
+    public $casts = ['tanggal_pensiun' => 'date', 'tanggal_lahir' => 'date'];
 
 
     public function pasangan(): HasOne
@@ -38,7 +38,7 @@ class Pegawai extends Model
     protected function statusUsulText(): Attribute
     {
         return Attribute::make(
-            get: fn () => match ($this->status_usul) {
+            get: fn() => match ($this->status_usul) {
                 0 => 'Draft',
                 1 => 'Terkirim',
                 2 => 'Perbaikan',
@@ -51,7 +51,7 @@ class Pegawai extends Model
     protected function statusUsulBadge(): Attribute
     {
         return Attribute::make(
-            get: fn () => match ($this->status_usul) {
+            get: fn() => match ($this->status_usul) {
                 0 => 'secondary', // Abu-abu
                 1 => 'info text-dark',      // Biru muda / info
                 2 => 'warning text-dark',   // Kuning
@@ -64,7 +64,7 @@ class Pegawai extends Model
     protected function statusUsulIcon(): Attribute
     {
         return Attribute::make(
-            get: fn () => match ($this->status_usul) {
+            get: fn() => match ($this->status_usul) {
                 0 => 'bi-file-earmark',        // Draft
                 1 => 'bi-send-check',                // Terkirim
                 2 => 'bi-exclamation-triangle', // Perbaikan
