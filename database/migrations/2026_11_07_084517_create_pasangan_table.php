@@ -24,6 +24,8 @@ return new class extends Migration
             $table->date('tanggal_akta');
             $table->string('file_akta');
             $table->boolean('mempunyai_anak');
+            $table->string('suket_janda_duda')->nullable();
+            $table->string('suket_kematian')->nullable();
             $table->foreignIdFor(Pegawai::class, 'pegawai_id')->constrained('pegawai', 'id')->onDelete('cascade');
             $table->timestamps();
         });

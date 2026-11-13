@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('nomor_akta');
             $table->date('tanggal_akta');
             $table->string('file_akta');
+            $table->string('keterangan');
             $table->foreignIdFor(Pasangan::class, 'pasangan_id')->constrained('pasangan', 'id')->onDelete('cascade');
             $table->timestamps();
         });

@@ -37,7 +37,7 @@
 
                 @include('pages.usul-pensiun.partials.upload-item', [
                     'field' => 'super_pemohon',
-                    'label' => 'Surat Pernyataan Pemohon',
+                    'label' => 'Surat Permohonan Pensiun',
                     'folder' => 'super-pemohon',
                 ])
 
@@ -82,7 +82,7 @@
 
                 @include('pages.usul-pensiun.partials.upload-item', [
                     'field' => 'skp_tahunan',
-                    'label' => 'SKP Tahunan Terakhir',
+                    'label' => 'SKP Tahunan Terakhir (yang ada logo garuda)',
                     'folder' => 'skp-tahunan',
                 ])
 

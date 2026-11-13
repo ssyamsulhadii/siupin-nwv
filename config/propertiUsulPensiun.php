@@ -92,5 +92,22 @@ return [
         'form_identitas_anak.tanggal_akta' => 'Tanggal Akta Kelahiran Anak',
         'form_identitas_anak.file_akta' => 'File Akta Kelahiran Anak',
         'form_identitas_anak.pasangan_id' => 'ID Pasangan',
+        
+        // --- Upload Dokumen ---
+        'upload_dokumen.supeng_instansi' => 'Supeng Instansi',
+        'upload_dokumen.super_pemohon' => 'Surat Permohonan Pensiun', // atau disesuaikan jika singkatan lain
+        'upload_dokumen.super_disiplin' => 'Surat Pernyataan Tidak Sedang Menjalani Hukuman Disiplin',
+        'upload_dokumen.super_pidana' => 'Surat Pernyataan Tidak Pernah Dipidana',
+        'upload_dokumen.sk_cpns' => 'SK CPNS',
+        'upload_dokumen.sk_pns' => 'SK PNS',
+        'upload_dokumen.sk_pangkat_akhir' => 'SK Pangkat Akhir',
+        'upload_dokumen.sk_pmk' => 'SK PMK (Peninjauan Masa Kerja)',
+        'upload_dokumen.skp_tahunan' => 'SKP Tahunan',
+        'upload_dokumen.foto_ktp' => 'Foto KTP',
+        'upload_dokumen.foto_kk' => 'Foto Kartu Keluarga (KK)',
+        'upload_dokumen.pas_foto' => 'Pas Foto',
+        'upload_dokumen.pertek_pensiun' => 'Pertek Pensiun (Pertimbangan Teknis BKN)',
+        'upload_dokumen.sk_pensiun' => 'SK Pensiun',
+        
     ],
 ];
