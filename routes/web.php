@@ -8,7 +8,7 @@ Route::livewire('/daftar', 'pages::account.register')->name('register')->middlew
 
 
 Route::middleware(['auth', 'level:admin'])->group(function () {
-    Route::livewire('/data-pemohon', 'pages::data-pemohon')->name('data-pemohon');
+    Route::livewire('/data-pemohon', 'pages::data-pemohon.index')->name('data-pemohon.index');
     Route::livewire('/jenis-pensiun', 'pages::jenis-pensiun')->name('jenis-pensiun');
     Route::livewire('/rumpun-jabatan', 'pages::rumpun-jabatan')->name('rumpun-jabatan');
     Route::livewire('/manajemen-user', 'pages::manajemen-user')->name('manajemen-user');

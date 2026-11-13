@@ -32,8 +32,8 @@
                 @auth
                     @if (Auth::user()->level == 'admin')
                         <!-- Menu Data Pemohon -->
-                        <a class="nav-link {{ request()->routeIs('data-pemohon') ? 'active' : '' }}"
-                            href="{{ route('data-pemohon') }}">
+                        <a class="nav-link {{ request()->routeIs('data-pemohon.index') ? 'active' : '' }}"
+                            href="{{ route('data-pemohon.index') }}">
                             <span class="nav-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
                             <span class="nav-text">Data Pemohon</span>
                         </a>
