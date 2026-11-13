@@ -75,7 +75,7 @@ new class extends Component {
                 <section class="panel">
                     <div class="panel-header">
                         <h2 class="h5 mb-1 section-title"><i class="bi bi-table" aria-hidden="true"></i>
-                            <span>Daftar User Pensiun</span>
+                            <span>Daftar User</span>
                         </h2>
                         <x-partials.forms.input-search />
                     </div>
@@ -85,8 +85,7 @@ new class extends Component {
                             <thead>
                                 <tr>
                                     <th class="text-center">No</th>
-                                    <th class="text-center">USERNAME(NIP)</th>
-                                    <th class="text-center">NIK</th>
+                                    <th>Data</th>
                                     <th>Nama</th>
                                     <th class="text-center">Menu</th>
                                 </tr>
@@ -97,8 +96,10 @@ new class extends Component {
                                         <td class="text-center fw-semibold" style="min-width: 40px;">
                                             {{ $list_user->firstItem() + $index }}
                                         </td>
-                                        <td class="text-center">{{ $user->username }}</td>
-                                        <td class="text-center">{{ $user->nik }}</td>
+                                        <td>NIP : {{ $user->username }}
+                                            <br>NIK : {{ $user->nik }}
+                                            <br>NKK : {{ $user->nkk }}
+                                        </td>
                                         <td>{{ $user->nama }}</td>
                                         <td class="text-center">
                                             <div class="d-flex align-items-center justify-content-center gap-1"
@@ -143,10 +144,6 @@ new class extends Component {
                     </div>
                     <div class="row g-3">
                         <x-partials.forms.input name="form.nama" label="Nama Lengkap" wire:model="form.nama"
-                            disabled></x-partials.forms.input>
-                        <x-partials.forms.input name="form.username" label="Username (NIP)" wire:model="form.username"
-                            disabled></x-partials.forms.input>
-                        <x-partials.forms.input name="form.nik" label="NIK" wire:model="form.nik"
                             disabled></x-partials.forms.input>
                         @if ($user_id)
                             <!-- Password Utama menggunakan Komponen Baru -->

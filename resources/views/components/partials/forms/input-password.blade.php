@@ -13,7 +13,7 @@
                 class="bi bi-lock"></i></span>
         <input type="password" class="form-control border-end-0 @error($name) is-invalid @enderror"
             id="{{ $id }}" @if ($wireModel) wire:model="{{ $wireModel }}" @endif
-            placeholder="{{ $placeholder }}" required>
+            placeholder="{{ $placeholder }}">
         <button type="button"
             class="btn btn-outline-secondary border-start-0 bg-transparent text-muted toggle-password-btn no-hover-effect @error($name) text-danger border-danger @else text-muted @enderror"
             data-target="{{ $id }}" style="border-color: #dee2e6;">

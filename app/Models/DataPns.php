@@ -50,6 +50,20 @@ class DataPns extends Model
         return null;
     }
 
+    public static function findByNipAndNik(string $nip, string $nik): ?object
+    {
+        $list = self::list();
+        
+        foreach ($list as $item) {
+            // Harus cocok kedua-duanya (NIP dan NIK)
+            if ($item->nip == $nip && $item->nik == $nik) {
+                return $item;
+            }
+        }
+        
+        return null; // Jika salah satu tidak cocok atau tidak ditemukan
+    }
+
 
     /**
      * Mendapatkan daftar pilihan pangkat dan golongan PNS dalam bentuk Collection of Objects.

@@ -23,11 +23,18 @@ new #[Layout('layouts.guest')] class extends Component {
                 'password_confirmation' => 'required|min:6',
             ],
             ['username.in' => 'NIP tidak terdaftar dalam sistem'],
+            ['nik.in' => 'NIK tidak terdaftar dalam sistem'],
         );
-        $validated['password'] = bcrypt($validated['password']);
-        $validated['nama'] = DataPns::findByNip($validated['username'])->nama;
-        User::create($validated);
-        return redirect()->route('login')->with('success', 'Akun berhasil dibuat. Silakan masuk dengan akun Anda.');
+        $account = DataPns::findByNipAndNik($this->username, $this->nik);
+        if ($account) {
+            $validated['password'] = bcrypt($this->password);
+            $validated['nama'] = $account->nama;
+            User::create($validated);
+            return redirect()->route('login')->with('success', 'Akun berhasil dibuat. Silakan masuk dengan akun Anda.');
+        } else {
+            $this->addError('username', 'Kombinasi NIP dan NIK tidak ditemukan dalam data PNS.');
+            return;
+        }
     }
 };
 ?>
@@ -70,12 +77,13 @@ new #[Layout('layouts.guest')] class extends Component {
                     placeholder="Masukkan NIP" icon="bi-person-badge" wireModel="username" />
 
                 <!-- Input NIK -->
+                <x-partials.forms.input-icon name="nik" label="NIK (Nomor Induk Kependudukan)" type="number"
+                    placeholder="Masukkan NIK" icon="bi-card-text" wireModel="nik" />
+
+                <!-- Input NIK -->
                 <x-partials.forms.input-icon name="nkk" label="NKK (Nomor Kartu Keluarga)" type="number"
                     placeholder="Masukkan NKK" icon="bi-card-text" wireModel="nkk" />
 
-                <!-- Input NIK -->
-                <x-partials.forms.input-icon name="nik" label="NIK (Nomor Induk Kependudukan)" type="number"
-                    placeholder="Masukkan NIK" icon="bi-card-text" wireModel="nik" />
 
                 <!-- Password Utama menggunakan Komponen Baru -->
                 <x-partials.forms.input-password name="password" label="Password" placeholder="Minimal 6 karakter"
