@@ -15,7 +15,7 @@ new #[Layout('layouts.guest')] class extends Component {
             'username' => ['required'],
             // 'password' => ['required'],
         ]);
-        $user = \App\Models\Pegawai::firstWhere('nip', $this->username);
+        $user = User::firstWhere('username', $this->username);
         // if ($user && Hash::check($this->password, $user->password)) {
         if ($user) {
             session()->regenerate();
