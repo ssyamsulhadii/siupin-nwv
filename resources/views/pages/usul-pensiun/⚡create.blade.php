@@ -93,11 +93,13 @@ new class extends Component {
                     // 'file_akta' => $this->pasangan->file_akta,
                     'pegawai_id' => $this->pasangan->pegawai_id,
                 ];
+                if ($this->pasangan->mempunyai_anak) {
+                    $this->list_anak = $this->pasangan->anak;
+                }
             }
         }
         $this->list_jenis_pensiun = JenisPensiun::all();
         $this->list_rumpun_jabatan = RumpunJabatan::all();
-        $this->list_anak = Anak::all();
     }
 
     //berada pada view step-1-form-identitas-diri
