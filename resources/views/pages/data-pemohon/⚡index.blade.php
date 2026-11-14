@@ -105,7 +105,7 @@ new class extends Component {
                     <div class="card border-0 shadow-sm mb-4">
                         <div class="card-header">
                             <h2 class="h5 mb-1 section-title"><i class="bi bi-table" aria-hidden="true"></i>
-                                <span>Filter Data ({{ count($list_pegawai) }})</span>
+                                <span>Filter Data ({{ $list_pegawai->total() }})</span>
                             </h2>
                         </div>
                         <div class="card-body">
