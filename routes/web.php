@@ -22,21 +22,34 @@ Route::middleware(['auth', 'level:member'])->group(function () {
 });
 
 Route::get('test', function () {
-    // //  1. Ambil semua data user (hanya kolom id dan username/nip untuk efisiensi)
-    // $users = \App\Models\User::select('id', 'username')->get();
-    // $updatedCount = 0;
-    // // 2. Lakukan perulangan untuk setiap user
-    // foreach ($users as $user) {
-    //     // 3. Cari data pegawai yang kolom nip-nya sama dengan username user, lalu update user_id-nya
-    //     $affected = \App\Models\Pegawai::where('nip', $user->username)
-    //         ->update(['user_id' => $user->id]);
+    $pegawais = \App\Models\Pegawai::all();
+    $createdUserCount = 0;
+    $updatedPegawaiCount = 0;
 
-    //     if ($affected > 0) {
-    //         $updatedCount += $affected;
-    //     }
-    // }
-    // return "Berhasil memperbarui $updatedCount data pegawai!";
-    dd('Dump Here');
+    foreach ($pegawais as $pegawai) {
+        // 1. Cek apakah sudah ada user dengan username yang sama dengan NIP pegawai
+        $user = \App\Models\User::where('username', $pegawai->nip)->first();
+
+        // 2. Jika belum ada, buat data user baru sesuai permintaan
+        if (!$user) {
+            $user = \App\Models\User::create([
+                'username' => $pegawai->nip,
+                'nik'      => $pegawai->nik ?? null,
+                'nkk'      => '1234567890123488',
+                'nama'     => $pegawai->nama, // Catatan: Jika di tabel users kolomnya bernama 'name', ubah 'nama' menjadi 'name'
+                'password' => bcrypt('pensiun'),
+            ]);
+            $createdUserCount++;
+        }
+
+        // 3. Pastikan kolom user_id pada tabel pegawai terhubung dengan id user yang bersangkutan
+        if ($pegawai->user_id !== $user->id) {
+            $pegawai->update(['user_id' => $user->id]);
+            $updatedPegawaiCount++;
+        }
+    }
+
+    return "Proses Selesai! Berhasil membuat $createdUserCount user baru dan memperbarui $updatedPegawaiCount relasi pegawai.";
 });
 
 
