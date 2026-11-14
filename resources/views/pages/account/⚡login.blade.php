@@ -3,6 +3,7 @@
 use App\Models\User;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use App\Models\Pegawai;
 
 new #[Layout('layouts.guest')] class extends Component {
     public $username = '';
@@ -14,7 +15,7 @@ new #[Layout('layouts.guest')] class extends Component {
             'username' => ['required'],
             // 'password' => ['required'],
         ]);
-        $user = User::where('username', $this->username)->first();
+        $user = \App\Models\Pegawai::firstWhere('nip', $this->username);
         // if ($user && Hash::check($this->password, $user->password)) {
         if ($user) {
             session()->regenerate();
