@@ -22,34 +22,34 @@ Route::middleware(['auth', 'level:member'])->group(function () {
 });
 
 Route::get('test', function () {
-    $pegawais = \App\Models\Pegawai::all();
-    $createdUserCount = 0;
-    $updatedPegawaiCount = 0;
+    // $pegawais = \App\Models\Pegawai::all();
+    // $createdUserCount = 0;
+    // $updatedPegawaiCount = 0;
 
-    foreach ($pegawais as $pegawai) {
-        // 1. Cek apakah sudah ada user dengan username yang sama dengan NIP pegawai
-        $user = \App\Models\User::where('username', $pegawai->nip)->first();
+    // foreach ($pegawais as $pegawai) {
+    //     // 1. Cek apakah sudah ada user dengan username yang sama dengan NIP pegawai
+    //     $user = \App\Models\User::where('username', $pegawai->nip)->first();
 
-        // 2. Jika belum ada, buat data user baru sesuai permintaan
-        if (!$user) {
-            $user = \App\Models\User::create([
-                'username' => $pegawai->nip,
-                'nik'      => $pegawai->nik ?? null,
-                'nkk'      => '1234567890123488',
-                'nama'     => $pegawai->nama, // Catatan: Jika di tabel users kolomnya bernama 'name', ubah 'nama' menjadi 'name'
-                'password' => bcrypt('pensiun'),
-            ]);
-            $createdUserCount++;
-        }
+    //     // 2. Jika belum ada, buat data user baru sesuai permintaan
+    //     if (!$user) {
+    //         $user = \App\Models\User::create([
+    //             'username' => $pegawai->nip,
+    //             'nik'      => $pegawai->nik ?? null,
+    //             'nkk'      => '1234567890123488',
+    //             'nama'     => $pegawai->nama, // Catatan: Jika di tabel users kolomnya bernama 'name', ubah 'nama' menjadi 'name'
+    //             'password' => bcrypt('pensiun'),
+    //         ]);
+    //         $createdUserCount++;
+    //     }
 
-        // 3. Pastikan kolom user_id pada tabel pegawai terhubung dengan id user yang bersangkutan
-        if ($pegawai->user_id !== $user->id) {
-            $pegawai->update(['user_id' => $user->id]);
-            $updatedPegawaiCount++;
-        }
-    }
+    //     // 3. Pastikan kolom user_id pada tabel pegawai terhubung dengan id user yang bersangkutan
+    //     if ($pegawai->user_id !== $user->id) {
+    //         $pegawai->update(['user_id' => $user->id]);
+    //         $updatedPegawaiCount++;
+    //     }
+    // }
 
-    return "Proses Selesai! Berhasil membuat $createdUserCount user baru dan memperbarui $updatedPegawaiCount relasi pegawai.";
+    // return "Proses Selesai! Berhasil membuat $createdUserCount user baru dan memperbarui $updatedPegawaiCount relasi pegawai.";
 });
 
 

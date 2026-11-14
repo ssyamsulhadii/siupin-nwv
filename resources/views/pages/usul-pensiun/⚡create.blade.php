@@ -237,7 +237,7 @@ new class extends Component {
         Anak::updateOrCreate(['id' => $this->anak_id], $validated['form_identitas_anak']);
         session()->flash('message', 'Data identitas anak berhasil disimpan!');
         $this->reset(['form_identitas_anak', 'anak_id']);
-        $this->list_anak = Anak::all();
+        $this->list_anak = $this->pasangan->anak;
     }
 
     public function editIdentitasAnak(Anak $anak)
@@ -261,7 +261,7 @@ new class extends Component {
     {
         Storage::disk('public')->delete('dokumen-pensiun/akta-kelahiran/' . $anak->file_akta);
         $anak->delete();
-        $this->list_anak = Anak::all();
+        $this->list_anak = $this->pasangan->anak;
         session()->flash('message', 'Data identitas anak berhasil dihapus!');
         $this->reset(['form_identitas_anak', 'anak_id']);
     }
