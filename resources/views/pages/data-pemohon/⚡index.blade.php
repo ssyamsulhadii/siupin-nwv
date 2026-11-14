@@ -149,7 +149,8 @@ new class extends Component {
                                         @forelse ($list_pegawai as $pegawai)
                                             <tr>
                                                 <td class="text-center fw-semibold" style="min-width: 40px;">
-                                                    1</td>
+                                                    {{ $list_pegawai->firstItem() + $index }}
+                                                </td>
                                                 <td>
                                                     <div class="fw-bold text-dark">{{ $pegawai->nama }}</div>
                                                     <div class="text-muted small">NIP.{{ $pegawai->nip }}</div>
@@ -285,7 +286,7 @@ new class extends Component {
                     </div>
 
                     <!-- Bagian Pagination -->
-                    <div class="panel-footer px-3 py-3 border-top">
+                    <div class="panel-footer px-3 py-3 border-top pt-5">
                         {{ $list_pegawai->links('livewire::bootstrap') }}
                     </div>
                 </section>
