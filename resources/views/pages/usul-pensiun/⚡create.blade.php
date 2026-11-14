@@ -37,6 +37,7 @@ new class extends Component {
         $pegawai = Pegawai::firstWhere('nip', Auth::user()->username);
         if ($pegawai) {
             $this->pegawai = $pegawai;
+            $this->pegawai->golongan_akhir = $pegawai->pangkat_golongan;
         } else {
             $this->pegawai = DataPns::findByNip(Auth::user()->username);
         }
