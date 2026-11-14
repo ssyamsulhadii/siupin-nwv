@@ -34,8 +34,13 @@ new class extends Component {
         $this->form_identitas_pasangan = config('propertiUsulPensiun.identitas_pasangan');
         $this->form_identitas_anak = config('propertiUsulPensiun.identitas_anak');
         $this->form_upload_dokumen = config('propertiUsulPensiun.upload_dokumen');
+        $pegawai = Pegawai::firstWhere('nip', Auth::user()->username);
+        if ($pegawai) {
+            $this->pegawai = $pegawai;
+        } else {
+            $this->pegawai = DataPns::findByNip(Auth::user()->username);
+        }
 
-        $this->pegawai = DataPns::findByNip(Auth::user()->username);
         $this->form_identitas_diri['nama_jabatan'] = $this->pegawai->jabatan;
         $this->data_mapping = [
             'nama' => $this->pegawai->nama,
