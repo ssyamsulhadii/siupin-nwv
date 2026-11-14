@@ -152,7 +152,8 @@ new class extends Component {
                                             <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled label="NIK"
                                                     value="{{ $pegawai->nik }}" /></div>
                                             <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
-                                                    label="Tanggal Lahir" value="{{ $pegawai->tanggal_lahir }}" />
+                                                    label="Tanggal Lahir"
+                                                    value="{{ $pegawai->tanggal_lahir->isoFormat('DD-MMMM-YYYY') }}" />
                                             </div>
                                             <div class="col-lg-3 mb-3"><x-partials.forms.input-disabled
                                                     label="Jenis Kelamin" value="{{ $pegawai->jenis_kelamin }}" />
@@ -272,6 +273,7 @@ new class extends Component {
                                                                 <th class="text-center">Jenis Kelamin</th>
                                                                 <th class="text-center">Telepon</th>
                                                                 <th>Informasi Akta</th>
+                                                                <th>Keterangan</th>
                                                                 <th class="text-center">File Akta</th>
                                                             </tr>
                                                         </thead>
@@ -296,6 +298,7 @@ new class extends Component {
                                                                         {{ $anak->tanggal_akta->isoFormat('DD-MMMM-YYYY') }}
                                                                         <br>
                                                                     </td>
+                                                                    <td>{{ $anak->keterangan }}</td>
                                                                     <td class="text-center">
                                                                         <button type="button"
                                                                             wire:click="previewFile('akta-kelahiran', '{{ $anak->file_akta }}', 'Akta Kelahiran')"

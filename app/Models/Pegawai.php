@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\DokumenPensiun;
 use App\Models\Pasangan;
+use App\Models\ProgresUsul;
 use App\Models\RumpunJabatan;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ class Pegawai extends Model
 {
     protected $table = "pegawai";
     protected $guarded = [];
-    public $casts = ['tanggal_pensiun' => 'date', 'tanggal_lahir' => 'date'];
+    public $casts = ['tanggal_pensiun' => 'date', 'tanggal_lahir' => 'date', 'tanggal_usul' => 'date'];
 
 
     public function pasangan(): HasOne
@@ -24,6 +25,10 @@ class Pegawai extends Model
     public function dokumenPensiun(): HasOne
     {
         return $this->hasOne(DokumenPensiun::class, 'pegawai_id');
+    }
+    public function progresUsul(): BelongsTo
+    {
+        return $this->belongsTo(ProgresUsul::class, 'progres_usul_id');
     }
 
     public function jenisPensiun(): BelongsTo
@@ -52,7 +57,7 @@ class Pegawai extends Model
     {
         return Attribute::make(
             get: fn() => match ($this->status_usul) {
-                0 => 'secondary', // Abu-abu
+                0 => 'secondary text-white', // Abu-abu
                 1 => 'info text-dark',      // Biru muda / info
                 2 => 'warning text-dark',   // Kuning
                 3 => 'success',     // Hijau

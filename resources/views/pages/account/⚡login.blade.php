@@ -66,7 +66,7 @@ new #[Layout('layouts.guest')] class extends Component {
                     placeholder="Masukkan NIP" icon="bi-person-badge" wireModel="username" />
 
                 <!-- Input Password -->
-                <x-partials.forms.input-password name="password" label="Password" placeholder="******"
+                <x-partials.forms.input-password name="password" label="Password" placeholder="*********"
                     wireModel="password" id="passwordInput" />
 
                 <button
