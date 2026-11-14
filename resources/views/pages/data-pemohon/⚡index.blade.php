@@ -146,7 +146,7 @@ new class extends Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($list_pegawai as $pegawai)
+                                        @forelse ($list_pegawai as $index => $pegawai)
                                             <tr>
                                                 <td class="text-center fw-semibold" style="min-width: 40px;">
                                                     {{ $list_pegawai->firstItem() + $index }}
